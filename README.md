@@ -11,7 +11,7 @@ Open Weather is a test mobile application to predict weather conditions. It was 
 - Emulator or Mobile Device
 - Hands to code :smile:
 
-## Dependencies
+## :pushpin: Dependencies
 
 - dartz: ^0.10.1
 - equatable: ^2.0.3
@@ -48,5 +48,6 @@ $ flutter pub get
 $ flutter run
 ```
 
-## Need Help?
+## :question: Need Help?
+
 - For support, please send me a message on LinkedIn at [Ibrahim Ibrahim](https://ww.linkedin.com/in/ibrahimaibrahim)
