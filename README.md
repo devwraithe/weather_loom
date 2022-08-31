@@ -2,7 +2,7 @@
 
 Open Weather is a test mobile application to predict weather conditions. It was developed using Dart and Flutter with Flutter BLoC for state management and the API is from [Open Weather Map](https://api.openweathermap.org/). The architecture is a combination of Uncle Bob's Clean Architecture and BLoC which is the recommended pattern for Flutter applications.
 
-## :camera: Previews
+## :camera: Screenshots
 
 <div style="display: flex;">
   <img src="assets/images/previews/default.png" width="250" />
