@@ -4,9 +4,11 @@ Open Weather is a test mobile application to predict weather conditions. It was 
 
 ## :camera: Previews
 
-<img src="assets/images/previews/default.png" width="250" />
-<img src="assets/images/previews/result.png" width="250" />
-<img src="assets/images/previews/error.png" width="250" />
+<div style="display: flex;">
+  <img src="assets/images/previews/default.png" width="250" />
+  <img src="assets/images/previews/result.png" width="250" />
+  <img src="assets/images/previews/error.png" width="250" />
+</div>
 
 ## :clipboard: Requirements
 
