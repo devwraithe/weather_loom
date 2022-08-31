@@ -1,6 +1,6 @@
 # Open Weather - Weather Forecast Application
 
-Open Weather is a test mobile application to predict weather conditions. It was developed using Dart and Flutter with Flutter BLoC for state management and the API is from [Open Weather Map](https://api.openweathermap.org/). The architecture is a combination of Uncle Bob's Clean Architecture and BLoC which is the recommended pattern for Flutter applications.
+Open Weather is a test mobile application to predict weather conditions. It was developed using Dart and Flutter with Flutter BLoC for state management and the API is from <a href="https://api.openweathermap.org/">Open Weather API</a>. The architecture is a combination of Uncle Bob's Clean Architecture and BLoC which is the recommended pattern for Flutter applications.
 
 ## :camera: Screenshots
 
@@ -30,7 +30,7 @@ Open Weather is a test mobile application to predict weather conditions. It was 
 
 ## :rocket: Getting Started
 
-NOTE: You must have Flutter installed to run this project. You can learn about the installation [here](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj2sp_h9e_5AhUSP-wKHQrvCx4QFnoECAkQAQ&url=https%3A%2F%2Fdocs.flutter.dev%2Fget-started%2Finstall&usg=AOvVaw0_DysGRxe6bHMb0c8Whvun).
+NOTE: You must have Flutter installed to run this project. You can learn about the installation <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj2sp_h9e_5AhUSP-wKHQrvCx4QFnoECAkQAQ&url=https%3A%2F%2Fdocs.flutter.dev%2Fget-started%2Finstall&usg=AOvVaw0_DysGRxe6bHMb0c8Whvun">here</a>.
 
 #### 1. Clone the repository
 
@@ -62,4 +62,4 @@ If you love this project and you find it useful, please consider giving it a :st
 
 ## :question: Need Help?
 
-- For support, you can get in touch with me via [LinkedIn](https://www.linkedin.com/in/ibrahimaibrahim)
+- For support, you can get in touch with me via <a href="https://www.linkedin.com/in/ibrahimaibrahim">LinkedIn</a>
