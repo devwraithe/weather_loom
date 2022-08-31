@@ -48,7 +48,7 @@ $ flutter run
 ```
 
 ## :heart: Think it's great?
-If you love this project and you find it useful, please consider giving it a :star: on GitHub and share it with everyone you know :heart_eyes:.
+If you love this project and you find it useful, please consider giving it a :star: and share it with everyone you know :heart_eyes:.
 
 ## :question: Need Help?
 
