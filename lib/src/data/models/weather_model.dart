@@ -2,6 +2,15 @@ import 'package:equatable/equatable.dart';
 import 'package:open_weather/src/domain/entities/weather.dart';
 
 class WeatherModel extends Equatable {
+  final String cityName;
+  final String main;
+  final String description;
+  final String iconCode;
+  final double temperature;
+  final int pressure;
+  final int humidity;
+  final double windSpeed;
+
   const WeatherModel({
     required this.cityName,
     required this.main,
@@ -10,15 +19,8 @@ class WeatherModel extends Equatable {
     required this.temperature,
     required this.pressure,
     required this.humidity,
+    required this.windSpeed,
   });
-
-  final String cityName;
-  final String main;
-  final String description;
-  final String iconCode;
-  final double temperature;
-  final int pressure;
-  final int humidity;
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) => WeatherModel(
         cityName: json['name'],
@@ -28,9 +30,10 @@ class WeatherModel extends Equatable {
         temperature: json['main']['temp'],
         pressure: json['main']['pressure'],
         humidity: json['main']['humidity'],
+        windSpeed: json['wind']['speed'],
       );
 
-      Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'weather': [
           {
             'main': main,
@@ -44,6 +47,9 @@ class WeatherModel extends Equatable {
           'humidity': humidity,
         },
         'name': cityName,
+        'wind': {
+          'speed': windSpeed,
+        }
       };
 
   Weather toEntity() => Weather(
@@ -54,6 +60,7 @@ class WeatherModel extends Equatable {
         temperature: temperature,
         pressure: pressure,
         humidity: humidity,
+        windSpeed: windSpeed,
       );
 
   @override
@@ -65,5 +72,6 @@ class WeatherModel extends Equatable {
         temperature,
         pressure,
         humidity,
+        windSpeed,
       ];
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:open_weather/src/data/config/constants.dart';
-import 'package:open_weather/src/data/config/exception.dart';
+import 'package:open_weather/src/core/errors/exception.dart';
+import 'package:open_weather/src/core/utils/api_utils.dart';
 import 'package:open_weather/src/data/models/weather_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,7 +16,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<WeatherModel> getCurrentWeather(String cityName) async {
     final response = await client.get(
       Uri.parse(
-        Urls.currentWeatherByName(cityName),
+        ApiUrls.currentWeatherByName(cityName),
       ),
     );
 

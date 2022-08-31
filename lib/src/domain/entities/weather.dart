@@ -8,6 +8,7 @@ class Weather extends Equatable {
   final double temperature;
   final int pressure;
   final int humidity;
+  final double windSpeed;
 
   const Weather({
     required this.cityName,
@@ -17,6 +18,7 @@ class Weather extends Equatable {
     required this.temperature,
     required this.pressure,
     required this.humidity,
+    required this.windSpeed,
   });
 
   @override
@@ -28,5 +30,6 @@ class Weather extends Equatable {
         temperature,
         pressure,
         humidity,
+        windSpeed,
       ];
 }

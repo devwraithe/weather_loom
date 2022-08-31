@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:open_weather/src/domain/entities/weather.dart';
+import '../../../domain/entities/weather.dart';
 
 abstract class WeatherState extends Equatable {
   const WeatherState();
@@ -22,7 +22,6 @@ class WeatherError extends WeatherState {
 
 class WeatherHasData extends WeatherState {
   final Weather result;
-
   const WeatherHasData(this.result);
 
   @override
