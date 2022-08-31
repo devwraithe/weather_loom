@@ -5,7 +5,7 @@ Open Weather is a test mobile application to predict weather conditions. It was 
 
 ## :clipboard: Requirements
 - Operating System (Windows, Linux or MacOS)
-- Flutter installed on Operating System
+- Flutter must be installed on the Operating System
 - Knowledge of the Flutter Framework
 - IDE (Visual Studio Code, Android Studio e.t.c)
 - Mobile Emulator or Mobile Device
