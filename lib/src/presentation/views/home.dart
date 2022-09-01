@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:open_weather/src/core/utils/api_utils.dart';
-import 'package:open_weather/src/presentation/widgets/attributes_card.dart';
-import 'package:open_weather/src/presentation/widgets/default_response.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+import '../../core/utils/api_utils.dart';
+import '../../presentation/widgets/attributes_card.dart';
+import '../../presentation/widgets/default_response.dart';
+import '../../presentation/widgets/search_field.dart';
 import '../../presentation/bloc/weather/weather_bloc.dart';
 import '../../presentation/bloc/weather/weather_event.dart';
 import '../../presentation/bloc/weather/weather_state.dart';
@@ -23,6 +25,27 @@ class _HomeState extends State<Home> {
     });
   }
 
+  // Get search value from input
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    searchController;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  final form = FormGroup({
+    'searchLocation': FormControl<String>(
+      value: '',
+      validators: [Validators.required],
+    ),
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,78 +57,43 @@ class _HomeState extends State<Home> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1.42,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 11,
-                  ),
-                  child: FocusScope(
-                    child: Focus(
-                      onFocusChange: (focus) => _toggleSearch(),
-                      child: TextFormField(
-                        strutStyle: StrutStyle.disabled,
-                        autofocus: false,
-                        keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.characters,
-                        textInputAction: TextInputAction.search,
-                        onFieldSubmitted: (query) {
-                          context.read<WeatherBloc>().add(OnCityChanged(query));
-                        },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          border: InputBorder.none,
-                          suffixIcon: (_isSearchIcon
-                              ? GestureDetector(
-                                  onTap: () {
-                                    FocusScopeNode currentFocus =
-                                        FocusScope.of(context);
-                                    if (!currentFocus.hasPrimaryFocus) {
-                                      currentFocus.unfocus();
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 4),
-                                    child: Text(
-                                      "Cancel",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
-                                  ),
-                                )
-                              : SvgPicture.asset(
-                                  "assets/icons/search.svg",
-                                  color: Colors.black,
-                                )),
-                          prefixIconColor: Colors.white,
-                          hintText: "Search by country, city...",
-                          hintStyle:
-                              Theme.of(context).textTheme.bodyText1?.copyWith(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                          suffixIconConstraints: const BoxConstraints(
-                            minHeight: 24,
-                            minWidth: 24,
+                SearchField(
+                  onFocusChange: (focus) => _toggleSearch(),
+                  formGroup: form,
+                  controller: searchController,
+                  onSubmitted: () {
+                    context.read<WeatherBloc>().add(
+                          OnCityChanged(
+                            searchController.text,
                           ),
-                        ),
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
+                        );
+                  },
+                  suffixIcon: (_isSearchIcon
+                      ? GestureDetector(
+                          onTap: () {
+                            FocusScopeNode currentFocus =
+                                FocusScope.of(context);
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              "Cancel",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                             ),
-                      ),
-                    ),
-                  ),
+                          ),
+                        )
+                      : SvgPicture.asset(
+                          "assets/icons/search.svg",
+                          color: Colors.grey,
+                        )),
                 ),
                 const SizedBox(height: 32.0),
                 BlocBuilder<WeatherBloc, WeatherState>(
@@ -136,11 +124,6 @@ class _HomeState extends State<Home> {
                                       ),
                                 ),
                                 const SizedBox(height: 28),
-                                // SvgPicture.asset(
-                                //   "assets/icons/sunny.svg",
-                                //   width: 84,
-                                //   height: 84,
-                                // ),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,

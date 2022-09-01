@@ -5,9 +5,9 @@ Open Weather is a test mobile application to predict weather conditions. It was 
 ## :camera: Screenshots
 
 <div style="display: flex;">
-  <img src="assets/images/previews/default.png" width="250" />
-  <img src="assets/images/previews/result.png" width="250" />
-  <img src="assets/images/previews/error.png" width="250" />
+  <img src="assets/screenshots/default.png" width="250" />
+  <img src="assets/screenshots/result.png" width="250" />
+  <img src="assets/screenshots/error.png" width="250" />
 </div>
 
 ## :clipboard: Requirements
@@ -27,6 +27,7 @@ Open Weather is a test mobile application to predict weather conditions. It was 
 - get_it: ^7.2.0
 - flutter_bloc: ^8.1.1
 - flutter_svg: ^1.0.3
+  reactive_forms: ^12.0.0
 
 ## :rocket: Getting Started
 
