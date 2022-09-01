@@ -27,7 +27,7 @@ Open Weather is a test mobile application to predict weather conditions. It was 
 - get_it: ^7.2.0
 - flutter_bloc: ^8.1.1
 - flutter_svg: ^1.0.3
-  reactive_forms: ^12.0.0
+- reactive_forms: ^12.0.0
 
 ## :rocket: Getting Started
 
