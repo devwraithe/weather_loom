@@ -4,6 +4,8 @@ import '../../bloc/weather/weather_event.dart';
 import '../../bloc/weather/weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
+  List? locationData = [];
+
   final GetCurrentWeather _getCurrentWeather;
   WeatherBloc(this._getCurrentWeather) : super(WeatherEmpty()) {
     on<OnCityChanged>(

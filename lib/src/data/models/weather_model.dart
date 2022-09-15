@@ -6,6 +6,7 @@ class WeatherModel extends Equatable {
   final String main;
   final String description;
   final String iconCode;
+  final String countryAbbr;
   final double temperature;
   final int pressure;
   final int humidity;
@@ -16,6 +17,7 @@ class WeatherModel extends Equatable {
     required this.main,
     required this.description,
     required this.iconCode,
+    required this.countryAbbr,
     required this.temperature,
     required this.pressure,
     required this.humidity,
@@ -27,6 +29,7 @@ class WeatherModel extends Equatable {
         main: json['weather'][0]['main'],
         description: json['weather'][0]['description'],
         iconCode: json['weather'][0]['icon'],
+        countryAbbr: json['sys']['country'],
         temperature: json['main']['temp'],
         pressure: json['main']['pressure'],
         humidity: json['main']['humidity'],
@@ -46,6 +49,9 @@ class WeatherModel extends Equatable {
           'pressure': pressure,
           'humidity': humidity,
         },
+        'sys': {
+          'country': countryAbbr,
+        },
         'name': cityName,
         'wind': {
           'speed': windSpeed,
@@ -57,6 +63,7 @@ class WeatherModel extends Equatable {
         main: main,
         description: description,
         iconCode: iconCode,
+        countryAbbr: countryAbbr,
         temperature: temperature,
         pressure: pressure,
         humidity: humidity,
@@ -69,6 +76,7 @@ class WeatherModel extends Equatable {
         main,
         description,
         iconCode,
+        countryAbbr,
         temperature,
         pressure,
         humidity,

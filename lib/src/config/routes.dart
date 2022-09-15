@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:open_weather/src/presentation/views/home.dart';
 
 const String home = '/';
+const String search = '/search';
 
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {

@@ -29,10 +29,10 @@ class AttributesCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             Text(
               value ?? "",
-              style: Theme.of(context).textTheme.bodyText1?.copyWith(
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
