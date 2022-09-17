@@ -36,13 +36,13 @@ NOTE: You must have Flutter installed to run this project. You can learn about t
 #### 1. Clone the repository
 
 ```sh
-$ git clone https://github.com/devwraithe/mobile_showcases
+$ git clone https://github.com/devwraithe/open_weather
 ```
 
 #### 2. Move to the project directory
 
 ```
-$ cd mobile_showcase
+$ cd open_weather
 ```
 
 #### 3. Install the required dependencies
