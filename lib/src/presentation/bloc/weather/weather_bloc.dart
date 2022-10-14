@@ -1,12 +1,8 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/usecases/get_current_weather.dart';
-import '../../bloc/weather/weather_event.dart';
-import '../../bloc/weather/weather_state.dart';
+import '../../../core/constants/imports_barrel.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  List? locationData = [];
-
   final GetCurrentWeather _getCurrentWeather;
+
   WeatherBloc(this._getCurrentWeather) : super(WeatherEmpty()) {
     on<OnCityChanged>(
       (event, emit) async {

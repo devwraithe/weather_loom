@@ -1,0 +1,1 @@
+// strings used in the app e.g button string, search hint

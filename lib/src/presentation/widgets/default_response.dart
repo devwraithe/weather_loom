@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DefaultResult extends StatelessWidget {
@@ -18,10 +20,12 @@ class DefaultResult extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 26),
             Image.asset(
-              icon ?? "assets/images/error.png",
-              width: 160,
+              icon ?? "assets/images/location.png",
+              width: 88,
             ),
+            const SizedBox(height: 16),
             Text(
               response ?? "Unavalable",
               textAlign: TextAlign.center,

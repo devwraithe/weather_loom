@@ -1,26 +1,9 @@
-import 'dart:async';
-import 'dart:developer';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:open_weather/src/presentation/widgets/custom_snack.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-
-import '../../core/utils/api_utils.dart';
-import '../../presentation/widgets/attributes_card.dart';
-import '../../presentation/widgets/default_response.dart';
-import '../../presentation/widgets/search_field.dart';
-import '../../presentation/bloc/weather/weather_bloc.dart';
-import '../../presentation/bloc/weather/weather_event.dart';
-import '../../presentation/bloc/weather/weather_state.dart';
+import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import '../../core/constants/imports_barrel.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -91,26 +74,44 @@ class _HomeState extends State<Home> {
   }
 
   Future<List?> getLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final coordinates = Coordinates(position.latitude, position.longitude);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-    log(first.locality.toString());
-    setState(() {
-      locationData = [
-        first.locality.toString(),
-        first.countryName.toString(),
-      ];
-    });
-    log(locationData![0].toString());
-    context.read<WeatherBloc>().add(
-          OnCityChanged(
-            locationData![0].toString(),
-          ),
-        );
-    return locationData;
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.unableToDetermine) {
+        return Future.error('Unable to determine location');
+      } else if (permission == LocationPermission.deniedForever) {
+        return Future.error('Unable to access location');
+      } else {
+        throw Exception("Unknown Error");
+      }
+    } else {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      final coordinates = Coordinates(
+        position.latitude,
+        position.longitude,
+      );
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(
+        coordinates,
+      );
+      var first = addresses.first;
+      log(first.locality.toString());
+      setState(() {
+        locationData = [
+          first.locality.toString(),
+          first.countryName.toString(),
+        ];
+      });
+      log(locationData![0].toString());
+      context.read<WeatherBloc>().add(
+            OnCityChanged(
+              locationData![0].toString(),
+            ),
+          );
+      return locationData;
+    }
   }
 
   @override
@@ -139,146 +140,347 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 36, 16, 16),
-            child: BlocBuilder<WeatherBloc, WeatherState>(
-              builder: (context, state) {
-                if (state is WeatherLoading) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.84,
-                    child: const Center(
-                      child: CupertinoActivityIndicator(),
-                    ),
-                  );
-                } else if (state is WeatherHasData) {
-                  return Column(
-                    key: const Key('weather_data'),
-                    children: [
-                      searchField(),
-                      Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.only(top: 42),
-                        child: Column(
-                          children: [
-                            Text(
-                              "${state.result.cityName}, ${state.result.countryAbbr}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              daysDate!.isEmpty ? "" : daysDate!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey,
-                                  ),
-                            ),
-                            const SizedBox(height: 34),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              width: 110,
-                              height: 110,
-                              child: Image(
-                                image: NetworkImage(
-                                  ApiUrls.weatherIcon(
-                                    state.result.iconCode,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 34),
-                            Text(
-                              "${(state.result.temperature - 273.15).roundToDouble().toString()}\u{00B0}c",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline1
-                                  ?.copyWith(
-                                    fontSize: 58,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                            Text(
-                              "${state.result.main}, ${state.result.description.toUpperCase()}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2
-                                  ?.copyWith(
-                                    color: Colors.grey[400],
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 82),
-                      GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 14,
-                        mainAxisSpacing: 14,
-                        childAspectRatio: 1.8,
-                        physics: const ClampingScrollPhysics(),
-                        shrinkWrap: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Pull the Current Weather
+              BlocBuilder<WeatherBloc, WeatherState>(
+                builder: (context, state) {
+                  if (state is WeatherLoading) {
+                    return const DataLoader(height: 0.4);
+                  } else if (state is WeatherHasData) {
+                    late num _lat, _lon;
+                    _lat = state.result.lat;
+                    _lon = state.result.lon;
+                    context
+                        .read<ForecastBloc>()
+                        .add(HourlyForecast(_lat, _lon));
+                    context
+                        .read<DailyForecastBloc>()
+                        .add(DailyForecast(_lat, _lon));
+
+                    final weather = state.result;
+
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 36, 18, 12),
+                      child: Column(
                         children: [
-                          AttributesCard(
-                            title: "Temperature",
-                            value:
-                                "${(state.result.temperature - 273.15).roundToDouble().toString()}\u{00B0}c",
+                          searchField(),
+                          const SizedBox(height: 42),
+                          Text(
+                            weather.cityName,
+                            style: textTheme.headline6,
                           ),
-                          AttributesCard(
-                            title: "Pressure",
-                            value: "${state.result.pressure.toString()}hPa",
+                          const SizedBox(height: 6),
+                          Text(
+                            "${weather.temperature.round()}\u{00B0}c",
+                            style:
+                                Theme.of(context).textTheme.headline1?.copyWith(
+                                      fontSize: 68,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                           ),
-                          AttributesCard(
-                            title: "Humidity",
-                            value: "${state.result.humidity.toString()}%",
-                          ),
-                          AttributesCard(
-                            title: "Wind",
-                            value: "${state.result.windSpeed.toString()}mps E",
+                          const SizedBox(height: 6),
+                          Text(
+                            capitalizeLetter(state.result.description),
+                            style: textTheme.subtitle1?.copyWith(
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
-                    ],
-                  );
-                } else if (state is WeatherError) {
-                  return Column(
-                    children: [
-                      searchField(),
-                      const SizedBox(height: 42),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.60,
-                        child: const Center(
-                          child: DefaultResult(
-                            icon: "assets/images/error.png",
-                            response: "Location\nNot Available",
+                    );
+                  } else if (state is WeatherError) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 26, horizontal: 18),
+                      child: Column(
+                        children: [
+                          searchField(),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            child: const Center(
+                              child: DefaultResult(
+                                icon: "assets/images/location.png",
+                                response: "Not Available",
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  );
-                } else {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.84,
-                    child: const Center(
-                      child: CupertinoActivityIndicator(),
+                    );
+                  } else {
+                    const ErrorResponse(
+                        height: 0.4, title: "Preparing Location Data...");
+                  }
+                  return const SizedBox();
+                },
+              ),
+              const SizedBox(height: 30),
+              // 24 Hour Forecast
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Text(
+                      "24 Hour Forecast",
+                      style: textTheme.subtitle2?.copyWith(
+                        color: Colors.grey,
+                      ),
                     ),
-                  );
-                }
-              },
-            ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              BlocBuilder<ForecastBloc, ForecastState>(
+                  builder: (context, state) => state is ForecastIsLoading
+                      ? const DataLoader(height: 0.2)
+                      : state is ForecastHasData
+                          ? SizedBox(
+                              height: 88,
+                              child: ListView.separated(
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(width: 22),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 18),
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.result.length,
+                                itemBuilder: (context, index) {
+                                  final hour = state.result[index];
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        DateFormat('ha').format(
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                            hour.time * 1000,
+                                            isUtc: false,
+                                          ),
+                                        ),
+                                        style: textTheme.bodyText1?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      CachedNetworkImage(
+                                        imageUrl: ApiUrls.weatherIcon(
+                                          hour.icon,
+                                        ),
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                          child: CupertinoActivityIndicator(),
+                                        ),
+                                        filterQuality: FilterQuality.high,
+                                        fit: BoxFit.cover,
+                                        width: 36,
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        "${state.result[index].temp.round().toString()}\u{00B0}c",
+                                        style: textTheme.bodyText1?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            )
+                          : state is ForecastHasError
+                              ? const ErrorResponse(
+                                  height: 0.2,
+                                  title: "24 Hour Forecast is Unavailable!")
+                              : const ErrorResponse(
+                                  height: 0.2,
+                                  title: "Preparing 24 Hour Forecast...")),
+              const SizedBox(height: 40),
+              // 16 Days Forecast
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Text(
+                      "7 Days Forecast",
+                      style: textTheme.subtitle2?.copyWith(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  BlocBuilder<DailyForecastBloc, DailyForecastState>(
+                      builder: (context, state) => state
+                              is DailyForecastIsLoading
+                          ? const DataLoader(height: 0.2)
+                          : state is DailyForecastHasData
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 18),
+                                  child: Column(
+                                    children: [
+                                      for (var day in state.result)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 8),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  DateFormat('MMMM d,EEEE').format(
+                                                              DateTime.fromMillisecondsSinceEpoch(
+                                                                  day.dailyTime
+                                                                          .toInt() *
+                                                                      1000,
+                                                                  isUtc:
+                                                                      false)) ==
+                                                          DateFormat(
+                                                                  'MMMM d,EEEE')
+                                                              .format(DateTime
+                                                                  .now())
+                                                      ? "Today"
+                                                      : DateFormat.EEEE()
+                                                          .format(
+                                                          DateTime.fromMillisecondsSinceEpoch(
+                                                              day.dailyTime
+                                                                      .toInt() *
+                                                                  1000,
+                                                              isUtc: false),
+                                                        ),
+                                                  style: textTheme.bodyText1
+                                                      ?.copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                              Flexible(
+                                                flex: 1,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    top: 6,
+                                                  ),
+                                                  child: Image.network(
+                                                    ApiUrls.weatherIcon(
+                                                      day.dailyIcon,
+                                                    ),
+                                                    width: 36,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  "${day.dailyMinTemp.round().toString()}\u{00B0}c to ${day.dailyMaxTemp.round().toString()}\u{00B0}c",
+                                                  textAlign: TextAlign.end,
+                                                  style: textTheme.bodyText1
+                                                      ?.copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                )
+                              : state is DailyForecastHasError
+                                  ? const ErrorResponse(
+                                      height: 0.2,
+                                      title: "7 Days Forecast is Unavailable!")
+                                  : const ErrorResponse(
+                                      height: 0.2,
+                                      title: "Preparing 7 Days Forecast...")),
+                ],
+              ),
+              const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: BlocBuilder<WeatherBloc, WeatherState>(
+                    builder: (context, state) => state is WeatherLoading
+                        ? const DataLoader(height: 0.4)
+                        : state is WeatherHasData
+                            ? Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Attribute(
+                                        title: "WIND",
+                                        value:
+                                            "${state.result.windSpeed.toString()} MPH",
+                                      ),
+                                      Attribute(
+                                        title: "HUMIDITY",
+                                        value:
+                                            "${state.result.humidity.toString()}%",
+                                      ),
+                                      Attribute(
+                                        title: "PRESSURE",
+                                        value:
+                                            "${state.result.pressure.toString()} inHg",
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 22),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Attribute(
+                                        title: "SUNRISE",
+                                        value: DateFormat('h:mma').format(
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                            state.result.sunrise.toInt() * 1000,
+                                            isUtc: false,
+                                          ),
+                                        ),
+                                      ),
+                                      Attribute(
+                                        title: "SUNSET",
+                                        value: DateFormat('h:mma').format(
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                            state.result.sunset.toInt() * 1000,
+                                            isUtc: false,
+                                          ),
+                                        ),
+                                      ),
+                                      Attribute(
+                                        title: "FEELS LIKE",
+                                        value:
+                                            "${state.result.feelsLike.round().toString()}\u{00B0}c",
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 26),
+                                ],
+                              )
+                            : state is ForecastHasError
+                                ? const ErrorResponse(
+                                    height: 0.4,
+                                    title: "Attributes are Unavailable!")
+                                : const ErrorResponse(
+                                    height: 0.4,
+                                    title: "Preparing Attributes...")),
+              ),
+            ],
           ),
         ),
       ),
@@ -306,7 +508,7 @@ class _HomeState extends State<Home> {
                 }
               },
               child: Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsets.only(top: 2),
                 child: Text(
                   "Cancel",
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(

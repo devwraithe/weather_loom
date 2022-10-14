@@ -19,6 +19,7 @@ dependencies:
   geolocator: ^9.0.1
   geocoder: ^0.2.1
   intl: ^0.17.0
+  cached_network_image: ^3.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -43,3 +44,14 @@ flutter:
         - asset: assets/fonts/Gilroy-Black.ttf
         - asset: assets/fonts/Gilroy-Medium.ttf
         - asset: assets/fonts/Gilroy-Heavy.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Black.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
+        - asset: assets/fonts/Inter-ExtraBold.ttf
+        - asset: assets/fonts/Inter-ExtraLight.ttf
+        - asset: assets/fonts/Inter-Light.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-SemiBold.ttf
+        - asset: assets/fonts/Inter-Thin.ttf

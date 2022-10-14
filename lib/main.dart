@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_weather/src/config/theme.dart';
 import 'src/presentation/bloc/weather/weather_bloc.dart';
 import 'src/presentation/views/home.dart';
-import 'src/injector.dart' as injector;
+import 'package:open_weather/src/presentation/bloc/geocoding/forecast_bloc.dart';
+import 'package:open_weather/src/presentation/bloc/daily_forecast/bloc.dart';
+import 'src/core/utilities/services/service_locator.dart' as injector;
 import 'src/config/routes.dart' as routes;
 
 void main() {
@@ -22,37 +25,17 @@ class OpenWeather extends StatelessWidget {
         BlocProvider(
           create: (_) => injector.locator<WeatherBloc>(),
         ),
+        BlocProvider(
+          create: (_) => injector.locator<ForecastBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => injector.locator<DailyForecastBloc>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Open Weather',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: "Gilroy",
-          visualDensity: VisualDensity.standard,
-          textTheme: const TextTheme(
-            headline1: TextStyle(
-              fontSize: 46.18,
-              fontWeight: FontWeight.w900,
-              color: Colors.black,
-            ),
-            headline5: TextStyle(
-              fontSize: 25.63,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-              height: 1.4,
-            ),
-            subtitle2: TextStyle(
-              fontSize: 18.00,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-            bodyText1: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
-          ),
-        ),
+        theme: themeData,
         home: const Home(),
         onGenerateRoute: routes.controller,
         initialRoute: routes.home,
