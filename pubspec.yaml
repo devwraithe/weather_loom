@@ -3,7 +3,7 @@ description: A weather tracking application built using Flutter.
 publish_to: "none"
 version: 1.0.0+1
 environment:
-  sdk: ">=2.15.1 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 dependencies:
   flutter:
     sdk: flutter
@@ -17,7 +17,7 @@ dependencies:
   reactive_forms: ^12.0.0
   connectivity_plus: ^2.3.6+1
   geolocator: ^9.0.1
-  geocoder: ^0.2.1
+  geocoding: ^2.1.1
   intl: ^0.17.0
   cached_network_image: ^3.2.2
 dev_dependencies:
@@ -32,6 +32,19 @@ flutter:
     - assets/icons/
     - assets/images/
   fonts:
+    - family: Satoshi
+      fonts:
+        - asset: assets/fonts/Satoshi-Black.otf
+        - asset: assets/fonts/Satoshi-BlackItalic.otf
+        - asset: assets/fonts/Satoshi-Bold.otf
+        - asset: assets/fonts/Satoshi-BoldItalic.otf
+        - asset: assets/fonts/Satoshi-Italic.otf
+        - asset: assets/fonts/Satoshi-Light.otf
+        - asset: assets/fonts/Satoshi-LightItalic.otf
+        - asset: assets/fonts/Satoshi-Medium.otf
+        - asset: assets/fonts/Satoshi-MediumItalic.otf
+        - asset: assets/fonts/Satoshi-Regular.otf
+
     - family: Gilroy
       fonts:
         - asset: assets/fonts/Gilroy-Light.ttf

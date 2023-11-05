@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:open_weather/src/presentation/views/home.dart';
 
-const String home = '/';
-const String search = '/search';
+class Routes {
+  static const String home = '/';
+  static const String search = '/search';
+}
 
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {
-    case home:
+    case Routes.home:
       return MaterialPageRoute(
         builder: (context) => const Home(),
       );

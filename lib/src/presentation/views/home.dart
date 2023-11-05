@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
+import 'package:intl/intl.dart';
+import 'package:open_weather/src/core/utilities/helpers/current_city_helper.dart';
+import 'package:open_weather/src/presentation/widgets/city_overview.dart';
+
 import '../../core/constants/imports_barrel.dart';
 
 class Home extends StatefulWidget {
@@ -21,114 +23,18 @@ class _HomeState extends State<Home> {
 
   TextEditingController searchController = TextEditingController();
 
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
-  Future<void> initiateConnectivity() async {
-    late ConnectivityResult result;
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      debugPrint('Couldn\'t check connectivity status => $e');
-      return;
-    }
-    if (!mounted) {
-      return Future.value(null);
-    }
-    return _updateConnectionStatus(result);
-  }
-
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(
-      () {
-        _connectionStatus = result;
-        _connectionStatus == ConnectivityResult.wifi ||
-                _connectionStatus == ConnectivityResult.mobile
-            ? CustomSnack.buildSnackBar(
-                "Internet is connected",
-                Colors.green,
-                context,
-              )
-            : CustomSnack.buildSnackBar(
-                "Internet is not connected",
-                Colors.red,
-                context,
-              );
-      },
-    );
-  }
-
-  List? locationData = [];
-  String? daysDate;
-
-  Future<String> todaysDate() async {
-    var today = DateTime.now();
-    var dateFormat = DateFormat("yMMMEd");
-    String currentDate = dateFormat.format(today);
-    setState(() {
-      daysDate = currentDate.toString();
-    });
-    log(daysDate.toString());
-    return daysDate!;
-  }
-
-  Future<List?> getLocation() async {
-    LocationPermission permission;
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.unableToDetermine) {
-        return Future.error('Unable to determine location');
-      } else if (permission == LocationPermission.deniedForever) {
-        return Future.error('Unable to access location');
-      } else {
-        throw Exception("Unknown Error");
-      }
-    } else {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      final coordinates = Coordinates(
-        position.latitude,
-        position.longitude,
-      );
-      var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        coordinates,
-      );
-      var first = addresses.first;
-      log(first.locality.toString());
-      setState(() {
-        locationData = [
-          first.locality.toString(),
-          first.countryName.toString(),
-        ];
-      });
-      log(locationData![0].toString());
-      context.read<WeatherBloc>().add(
-            OnCityChanged(
-              locationData![0].toString(),
-            ),
-          );
-      return locationData;
-    }
+  // Get the weather information for the current city
+  void currentCityInfo() async {
+    final city = await getCurrentCity();
+    debugPrint("My current city is $city");
+    context.read<WeatherBloc>().add(OnCityChanged(city));
   }
 
   @override
   void initState() {
     searchController;
-    initiateConnectivity();
-    getLocation();
-    todaysDate();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _connectivitySubscription.cancel();
-    super.dispose();
+    currentCityInfo();
   }
 
   final form = FormGroup({
@@ -143,86 +49,11 @@ class _HomeState extends State<Home> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Pull the Current Weather
-              BlocBuilder<WeatherBloc, WeatherState>(
-                builder: (context, state) {
-                  if (state is WeatherLoading) {
-                    return const DataLoader(height: 0.4);
-                  } else if (state is WeatherHasData) {
-                    late num _lat, _lon;
-                    _lat = state.result.lat;
-                    _lon = state.result.lon;
-                    context
-                        .read<ForecastBloc>()
-                        .add(HourlyForecast(_lat, _lon));
-                    context
-                        .read<DailyForecastBloc>()
-                        .add(DailyForecast(_lat, _lon));
-
-                    final weather = state.result;
-
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(18, 36, 18, 12),
-                      child: Column(
-                        children: [
-                          searchField(),
-                          const SizedBox(height: 42),
-                          Text(
-                            weather.cityName,
-                            style: textTheme.headline6,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            "${weather.temperature.round()}\u{00B0}c",
-                            style:
-                                Theme.of(context).textTheme.headline1?.copyWith(
-                                      fontSize: 68,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            capitalizeLetter(state.result.description),
-                            style: textTheme.subtitle1?.copyWith(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if (state is WeatherError) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 26, horizontal: 18),
-                      child: Column(
-                        children: [
-                          searchField(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.6,
-                            child: const Center(
-                              child: DefaultResult(
-                                icon: "assets/images/location.png",
-                                response: "Not Available",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    const ErrorResponse(
-                        height: 0.4, title: "Preparing Location Data...");
-                  }
-                  return const SizedBox();
-                },
-              ),
+              const CityOverview(),
               const SizedBox(height: 30),
               // 24 Hour Forecast
               Column(
