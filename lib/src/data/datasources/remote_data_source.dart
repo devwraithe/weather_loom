@@ -1,15 +1,18 @@
 import 'dart:convert';
-import 'package:open_weather/src/core/errors/exception.dart';
+
+import 'package:http/http.dart' as http;
 import 'package:open_weather/src/core/constants/api_paths.dart';
+import 'package:open_weather/src/core/errors/exception.dart';
 import 'package:open_weather/src/data/models/daily_forecast_model.dart';
 import 'package:open_weather/src/data/models/forecast_model.dart';
+import 'package:open_weather/src/data/models/location_model.dart';
 import 'package:open_weather/src/data/models/weather_model.dart';
-import 'package:http/http.dart' as http;
 
 abstract class RemoteDataSource {
   Future<WeatherModel> getCurrentWeather(String cityName);
   Future<List<ForecastModel>> getHourlyForecast(num lat, num lon);
   Future<List<DailyForecastModel>> getDailyForecast(num lat, num lon);
+  Future<List<LocationModel>> getLocations(String location);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -49,8 +52,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<List<DailyForecastModel>> getDailyForecast(
-      num lat, num lon) async {
+  Future<List<DailyForecastModel>> getDailyForecast(num lat, num lon) async {
     final response = await client.get(
       Uri.parse(
         ApiUrls.weatherDailyForecast(lat, lon),
@@ -64,6 +66,21 @@ class RemoteDataSourceImpl implements RemoteDataSource {
           .toList();
     } else {
       // throw ServerException();
+      throw response.body;
+    }
+  }
+
+  @override
+  Future<List<LocationModel>> getLocations(String location) async {
+    final response = await client.get(
+      Uri.parse(ApiUrls.getLocations(location)),
+    );
+
+    if (response.statusCode == 200) {
+      final List responseData =
+          jsonDecode(response.body)["predictions"] as List;
+      return responseData.map((elem) => LocationModel.fromJson(elem)).toList();
+    } else {
       throw response.body;
     }
   }

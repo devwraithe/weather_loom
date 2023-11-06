@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:open_weather/src/config/theme/app_colors.dart';
+import 'package:open_weather/src/config/theme/app_text_theme.dart';
 import 'package:open_weather/src/core/utilities/constants.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_date_helper.dart';
+import 'package:open_weather/src/presentation/bloc/find_locations/bloc.dart';
+import 'package:open_weather/src/presentation/bloc/find_locations/event.dart';
+import 'package:open_weather/src/presentation/bloc/find_locations/state.dart';
+import 'package:open_weather/src/presentation/widgets/location_item.dart';
 
 import '../../core/constants/imports_barrel.dart';
 
@@ -31,12 +38,23 @@ class _CityOverviewState extends State<CityOverview> {
           context.read<DailyForecastBloc>().add(DailyForecast(_lat, _lon));
 
           return Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 60,
-            ),
+            padding: const EdgeInsets.only(bottom: 60, top: 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                GestureDetector(
+                  onTap: () => _locationsList(),
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    margin: const EdgeInsets.only(right: 18),
+                    child: const Icon(
+                      TablerIcons.list,
+                      color: AppColors.white,
+                      size: 26,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
                 Text(
                   result.cityName,
                   style: textTheme.headlineMedium,
@@ -61,6 +79,90 @@ class _CityOverviewState extends State<CityOverview> {
           );
         }
         return const SizedBox();
+      },
+    );
+  }
+
+  // Trigger the bottom sheet for list
+  _locationsList() {
+    TextEditingController search = TextEditingController();
+
+    dispose() {
+      super.dispose();
+      search.dispose();
+    }
+
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      showDragHandle: true,
+      useSafeArea: true,
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.only(
+            left: 18,
+            right: 18,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Locations",
+                style: AppTextTheme.textTheme.headlineLarge?.copyWith(
+                  color: AppColors.black,
+                ),
+              ),
+              const SizedBox(height: 20),
+              // TextFormField(
+              //   controller: search,
+              //   onFieldSubmitted: (v) async {
+              //     context.read<WeatherBloc>().add(
+              //           OnCityChanged(v),
+              //         );
+              //     Navigator.pop(context);
+              //   },
+              // ),
+              TextFormField(
+                controller: search,
+                onChanged: (v) async {
+                  context
+                      .read<FindLocationBloc>()
+                      .add(OnLocationChange(search.text));
+                  // Navigator.pop(context);
+                },
+              ),
+              const SizedBox(height: 28),
+              BlocBuilder<FindLocationBloc, FindLocationState>(
+                builder: (context, state) {
+                  if (state is FindLocationLoading) {
+                    return const CircularProgressIndicator(
+                      color: AppColors.black,
+                    );
+                  } else if (state is FindLocationError) {
+                    return Text(state.message);
+                  } else if (state is FindLocationSuccess) {
+                    return Column(
+                      children: [
+                        for (final location in state.result)
+                          LocationItem(
+                            title: location.mainText,
+                            subtitle: location.secText,
+                          ),
+                      ],
+                    );
+                  } else {
+                    return const Text(
+                      "Start typing to find location",
+                      style: TextStyle(color: Colors.black),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        );
       },
     );
   }

@@ -11,4 +11,7 @@ class ApiUrls {
       '$baseUrl/onecall?lat=$lat&lon=$lon&exclude=daily,minutely,current,alerts$units$apiKey';
   static String weatherDailyForecast(num lat, num lon) =>
       '$baseUrl/onecall?lat=$lat&lon=$lon&exclude=hourly,minutely,current,alerts$units$apiKey';
+
+  static String getLocations(String location) =>
+      'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$location&key=AIzaSyDdNq79JI9z22ta0bOICaQ7iSG0c7kgHHs';
 }
