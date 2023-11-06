@@ -47,8 +47,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return const Scaffold(
       backgroundColor: AppColors.blue,
       body: SafeArea(

@@ -10,5 +10,6 @@ class AppTheme {
     colorScheme: AppColorScheme.lightColorScheme,
     scaffoldBackgroundColor: AppColorScheme.lightColorScheme.background,
     textTheme: AppTextTheme.textTheme,
+    useMaterial3: true,
   );
 }
