@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_weather/src/core/utilities/constants.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_date_helper.dart';
 
 import '../../core/constants/imports_barrel.dart';
@@ -40,19 +41,20 @@ class _CityOverviewState extends State<CityOverview> {
                   result.cityName,
                   style: textTheme.headlineMedium,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 12),
                 Text(
-                  "${result.temperature.round()}",
+                  "${result.temperature.round()}${Constants.deg}",
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
+                const SizedBox(height: 4),
                 Text(
                   capitalizeLetter(state.result.description),
                   style: textTheme.bodyLarge,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
                   currentDate(),
-                  style: textTheme.bodyLarge,
+                  style: textTheme.bodyMedium,
                 ),
               ],
             ),

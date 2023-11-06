@@ -8,6 +8,7 @@ class AppColors {
   static const Color lightGray = Color(0xFFD7D7D7);
   static const Color red = Color(0xFFD0312D);
   static const Color green = Color(0xFF198754);
+  static const Color blue = Color(0xff005aff);
 
   // variants for flashcard background
   static const Color cardGreen = Color(0xFF2AA95B);
