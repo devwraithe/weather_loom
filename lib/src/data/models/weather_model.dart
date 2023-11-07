@@ -5,8 +5,8 @@ class WeatherModel extends Equatable {
   final num lon, lat;
   final int sunrise, sunset;
   final String cityName, main, description, iconCode, countryAbbr;
-  final double temperature, windSpeed, feelsLike;
-  final int pressure, humidity;
+  final double windSpeed, feelsLike;
+  final int temperature, pressure, humidity;
 
   const WeatherModel({
     required this.sunrise,
@@ -35,7 +35,7 @@ class WeatherModel extends Equatable {
         description: json['weather'][0]['description'],
         iconCode: json['weather'][0]['icon'],
         countryAbbr: json['sys']['country'],
-        temperature: json['main']['temp'],
+        temperature: json['main']['temp'].round(),
         feelsLike: json['main']['feels_like'],
         pressure: json['main']['pressure'],
         humidity: json['main']['humidity'],
