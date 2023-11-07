@@ -13,9 +13,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           (failure) => emit(
             WeatherError(failure.message),
           ),
-          (data) => emit(
-            WeatherHasData(data),
-          ),
+          (data) {
+            emit(WeatherHasData(data));
+          },
         );
       },
     );

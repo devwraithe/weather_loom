@@ -12,18 +12,33 @@ import 'package:open_weather/src/presentation/widgets/location_item.dart';
 import '../../core/constants/imports_barrel.dart';
 
 class CityOverview extends StatefulWidget {
-  const CityOverview({super.key});
+  const CityOverview({
+    super.key,
+    required this.onTemperatureAvailable,
+  });
+
+  final Function(int) onTemperatureAvailable;
 
   @override
   State<CityOverview> createState() => _CityOverviewState();
 }
 
 class _CityOverviewState extends State<CityOverview> {
+  // In your widget, when the temperature is available:
+  void updateTemperature(int temperature) {
+    widget.onTemperatureAvailable(temperature);
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return BlocBuilder<WeatherBloc, WeatherState>(
+    return BlocConsumer<WeatherBloc, WeatherState>(
+      listener: (context, state) {
+        if (state is WeatherHasData) {
+          updateTemperature(state.result.temperature);
+        }
+      },
       builder: (context, state) {
         if (state is WeatherLoading) {
           return const DataLoader(height: 0.4);
