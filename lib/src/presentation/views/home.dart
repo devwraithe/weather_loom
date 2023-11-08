@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
   // Get the weather information for the current city
   void currentCityInfo() async {
     final city = await getCurrentCity();
-    debugPrint("My current city is $city");
     context.read<WeatherBloc>().add(OnCityChanged(city));
   }
 
@@ -48,7 +47,7 @@ class _HomeState extends State<Home> {
             Column(
               children: [
                 CityOverview(onTemperatureAvailable: handleTemperature),
-                const HourForecast(),
+                HourForecast(temperature: temperature),
                 const SizedBox(height: 18),
                 const DayForecast(),
                 const SizedBox(height: 18),
