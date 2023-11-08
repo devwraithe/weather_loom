@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:open_weather/src/config/theme/app_colors.dart';
@@ -8,7 +6,12 @@ import 'package:open_weather/src/config/theme/app_text_theme.dart';
 import '../../core/constants/imports_barrel.dart';
 
 class HourForecast extends StatefulWidget {
-  const HourForecast({super.key});
+  const HourForecast({
+    super.key,
+    required this.temperature,
+  });
+
+  final int temperature;
 
   @override
   State<HourForecast> createState() => _HourForecastState();
@@ -69,13 +72,14 @@ class _HourForecastState extends State<HourForecast> {
                                     style: textTheme.bodyMedium,
                                   ),
                                   const SizedBox(height: 10),
-                                  CachedNetworkImage(
-                                    imageUrl: ApiUrls.weatherIcon(
-                                      hour.icon,
-                                    ),
-                                    placeholder: (context, url) => const Center(
-                                      child: CupertinoActivityIndicator(),
-                                    ),
+                                  Image.asset(
+                                    // imageUrl: ApiUrls.weatherIcon(
+                                    //   hour.icon,
+                                    // ),
+                                    widget.temperature < 20
+                                        ? 'assets/icons/cloud.png'
+                                        : 'assets/icons/night-rain.png',
+
                                     filterQuality: FilterQuality.high,
                                     fit: BoxFit.cover,
                                     width: 36,
