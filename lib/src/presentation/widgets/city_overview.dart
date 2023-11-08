@@ -8,6 +8,7 @@ import 'package:open_weather/src/presentation/bloc/find_locations/bloc.dart';
 import 'package:open_weather/src/presentation/bloc/find_locations/event.dart';
 import 'package:open_weather/src/presentation/bloc/find_locations/state.dart';
 import 'package:open_weather/src/presentation/widgets/location_item.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../core/constants/imports_barrel.dart';
 
@@ -41,7 +42,7 @@ class _CityOverviewState extends State<CityOverview> {
       },
       builder: (context, state) {
         if (state is WeatherLoading) {
-          return const DataLoader(height: 0.4);
+          return _buildShimmerLoader();
         }
         if (state is WeatherHasData) {
           final result = state.result;
@@ -61,7 +62,10 @@ class _CityOverviewState extends State<CityOverview> {
                   onTap: () => _locationsList(),
                   child: Container(
                     alignment: Alignment.topRight,
-                    margin: const EdgeInsets.only(right: 18),
+                    margin: const EdgeInsets.only(
+                      right: 18,
+                      top: 16,
+                    ),
                     child: const Icon(
                       TablerIcons.list,
                       color: AppColors.white,
@@ -179,6 +183,44 @@ class _CityOverviewState extends State<CityOverview> {
           ),
         );
       },
+    );
+  }
+
+  // Shimmer loading effect
+  _buildShimmerLoader() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 60, top: 30),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 70),
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              height: 14,
+              width: 140,
+              decoration: BoxDecoration(
+                color: AppColors.grey,
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              height: 10,
+              width: 70,
+              decoration: BoxDecoration(
+                color: AppColors.grey,
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
