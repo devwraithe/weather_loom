@@ -26,3 +26,16 @@ Future<String> getCurrentCity() async {
     throw Exception('Failed to get current city: $e');
   }
 }
+
+// Return position
+Future<Position> getCoordinates() async {
+  try {
+    // Get the current location
+    Position position = await getCurrentLocation();
+
+    return position;
+  } catch (e) {
+    // Handle any exceptions that may occur during location retrieval or geocoding
+    throw Exception('Failed to get current city: $e');
+  }
+}

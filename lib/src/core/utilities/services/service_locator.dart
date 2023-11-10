@@ -2,11 +2,13 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_weather/src/data/repositories/forecast_repository_impl.dart';
 import 'package:open_weather/src/domain/repositories/forecast_repository.dart';
+import 'package:open_weather/src/domain/usecases/forecast_usecase.dart';
 import 'package:open_weather/src/domain/usecases/get_daily_forecast.dart';
 import 'package:open_weather/src/domain/usecases/get_hourly_forecast.dart';
 import 'package:open_weather/src/domain/usecases/get_locations_usecase.dart';
 import 'package:open_weather/src/presentation/bloc/daily_forecast/bloc.dart';
 import 'package:open_weather/src/presentation/bloc/find_locations/bloc.dart';
+import 'package:open_weather/src/presentation/bloc/forecast/bloc.dart';
 import 'package:open_weather/src/presentation/bloc/geocoding/forecast_bloc.dart';
 
 import '../../../data/datasources/remote_data_source.dart';
@@ -42,6 +44,12 @@ void init() {
     ),
   );
 
+  locator.registerFactory(
+    () => NewForecastBloc(
+      locator(),
+    ),
+  );
+
   // use case
   locator.registerLazySingleton(
     () => GetCurrentWeather(
@@ -61,6 +69,11 @@ void init() {
 
   locator.registerLazySingleton(
     () => GetLocationsUsecase(
+      locator(),
+    ),
+  );
+  locator.registerLazySingleton(
+    () => ForecastUsecase(
       locator(),
     ),
   );

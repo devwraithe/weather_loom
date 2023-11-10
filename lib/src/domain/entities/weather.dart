@@ -7,7 +7,7 @@ class Weather extends Equatable {
   final String description;
   final String iconCode;
   final String countryAbbr;
-  final double windSpeed, feelsLike;
+  final dynamic windSpeed, feelsLike;
   final int temperature, pressure, humidity, sunrise, sunset;
 
   const Weather({

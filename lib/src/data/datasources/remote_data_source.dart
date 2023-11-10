@@ -8,11 +8,15 @@ import 'package:open_weather/src/data/models/forecast_model.dart';
 import 'package:open_weather/src/data/models/location_model.dart';
 import 'package:open_weather/src/data/models/weather_model.dart';
 
+import '../models/new_weather_model.dart';
+
 abstract class RemoteDataSource {
   Future<WeatherModel> getCurrentWeather(String cityName);
   Future<List<ForecastModel>> getHourlyForecast(num lat, num lon);
   Future<List<DailyForecastModel>> getDailyForecast(num lat, num lon);
   Future<List<LocationModel>> getLocations(String location);
+
+  Future<NewWeatherModel> forecast(String lat, String lon);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -80,6 +84,20 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       final List responseData =
           jsonDecode(response.body)["predictions"] as List;
       return responseData.map((elem) => LocationModel.fromJson(elem)).toList();
+    } else {
+      throw response.body;
+    }
+  }
+
+  @override
+  Future<NewWeatherModel> forecast(String lat, String lon) async {
+    final response = await client.get(
+      Uri.parse(ApiUrls.forecast(lat, lon)),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      return NewWeatherModel.fromJson(responseData);
     } else {
       throw response.body;
     }
