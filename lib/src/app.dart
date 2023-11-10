@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_weather/src/config/routes.dart';
 import 'package:open_weather/src/presentation/bloc/find_locations/bloc.dart';
+import 'package:open_weather/src/presentation/bloc/forecast/bloc.dart';
 import 'package:open_weather/src/presentation/views/home.dart';
 
 import '../src/core/utilities/services/service_locator.dart' as injector;
@@ -25,6 +26,7 @@ class OpenWeather extends StatelessWidget {
         BlocProvider(
           create: (_) => injector.locator<FindLocationBloc>(),
         ),
+        BlocProvider(create: (_) => injector.locator<NewForecastBloc>()),
       ],
       child: MaterialApp(
         title: 'Open Weather',

@@ -5,7 +5,7 @@ class WeatherModel extends Equatable {
   final num lon, lat;
   final int sunrise, sunset;
   final String cityName, main, description, iconCode, countryAbbr;
-  final double windSpeed, feelsLike;
+  final dynamic windSpeed, feelsLike;
   final int temperature, pressure, humidity;
 
   const WeatherModel({

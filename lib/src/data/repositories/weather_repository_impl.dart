@@ -8,6 +8,8 @@ import 'package:open_weather/src/domain/entities/location.dart';
 import 'package:open_weather/src/domain/entities/weather.dart';
 import 'package:open_weather/src/domain/repositories/weather_repository.dart';
 
+import '../../domain/entities/new_weather.dart';
+
 class WeatherRepositoryImpl implements WeatherRepository {
   final RemoteDataSource remoteDataSource;
   WeatherRepositoryImpl({required this.remoteDataSource});
@@ -31,6 +33,20 @@ class WeatherRepositoryImpl implements WeatherRepository {
     try {
       final result = await remoteDataSource.getLocations(location);
       return Right(result.map((e) => e.toEntity()).toList());
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(
+        ConnectionFailure('Failed to connect to the network'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, NewWeather>> forecast(String lat, String lon) async {
+    try {
+      final result = await remoteDataSource.forecast(lat, lon);
+      return Right(result.toEntity());
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

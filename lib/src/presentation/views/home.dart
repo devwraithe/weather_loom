@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_city_helper.dart';
+import 'package:open_weather/src/presentation/bloc/forecast/bloc.dart';
+import 'package:open_weather/src/presentation/bloc/forecast/event.dart';
 import 'package:open_weather/src/presentation/widgets/city_overview.dart';
 import 'package:open_weather/src/presentation/widgets/day_forecast.dart';
 import 'package:open_weather/src/presentation/widgets/weather_attributes.dart';
@@ -32,6 +34,18 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     currentCityInfo();
+    _initNewForecast();
+  }
+
+  void _initNewForecast() async {
+    final coordinates = await getCoordinates();
+    context.read<NewForecastBloc>().add(
+          OnCoordinatesChange(
+            coordinates.latitude.toString(),
+            coordinates.longitude.toString(),
+          ),
+        );
+    debugPrint("New forecast initialized!");
   }
 
   @override
