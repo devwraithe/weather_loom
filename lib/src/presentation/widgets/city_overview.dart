@@ -15,10 +15,10 @@ import '../../core/constants/imports_barrel.dart';
 class CityOverview extends StatefulWidget {
   const CityOverview({
     super.key,
-    required this.onTemperatureAvailable,
+    required this.onWeatherAvailable,
   });
 
-  final Function(int) onTemperatureAvailable;
+  final Function(String) onWeatherAvailable;
 
   @override
   State<CityOverview> createState() => _CityOverviewState();
@@ -26,8 +26,8 @@ class CityOverview extends StatefulWidget {
 
 class _CityOverviewState extends State<CityOverview> {
   // In your widget, when the temperature is available:
-  void updateTemperature(int temperature) {
-    widget.onTemperatureAvailable(temperature);
+  void updateWeather(String weather) {
+    widget.onWeatherAvailable(weather);
   }
 
   @override
@@ -37,7 +37,7 @@ class _CityOverviewState extends State<CityOverview> {
     return BlocConsumer<WeatherBloc, WeatherState>(
       listener: (context, state) {
         if (state is WeatherHasData) {
-          updateTemperature(state.result.temperature);
+          updateWeather(state.result.main);
         }
       },
       builder: (context, state) {
