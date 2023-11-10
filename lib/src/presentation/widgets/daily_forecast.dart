@@ -8,10 +8,10 @@ import '../../core/constants/imports_barrel.dart';
 class HourForecast extends StatefulWidget {
   const HourForecast({
     super.key,
-    required this.temperature,
+    required this.weather,
   });
 
-  final int temperature;
+  final String weather;
 
   @override
   State<HourForecast> createState() => _HourForecastState();
@@ -76,7 +76,7 @@ class _HourForecastState extends State<HourForecast> {
                                     // imageUrl: ApiUrls.weatherIcon(
                                     //   hour.icon,
                                     // ),
-                                    widget.temperature < 20
+                                    widget.weather == "cloudy"
                                         ? 'assets/icons/cloud.png'
                                         : 'assets/icons/night-rain.png',
 

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_city_helper.dart';
 import 'package:open_weather/src/presentation/widgets/city_overview.dart';
@@ -15,10 +16,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int temperature = 0;
+  String weather = "";
 
-  void handleTemperature(int newTemperature) {
-    setState(() => temperature = newTemperature);
+  void handleWeather(String newWeather) {
+    setState(() => weather = newWeather);
   }
 
   // Get the weather information for the current city
@@ -39,15 +40,16 @@ class _HomeState extends State<Home> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            Container(
-              color: tempColor(temperature),
+            CachedNetworkImage(
+              imageUrl: weatherImage(weather),
               width: double.infinity,
               height: MediaQuery.of(context).size.height,
+              fit: BoxFit.cover,
             ),
             Column(
               children: [
-                CityOverview(onTemperatureAvailable: handleTemperature),
-                HourForecast(temperature: temperature),
+                CityOverview(onWeatherAvailable: handleWeather),
+                HourForecast(weather: weather),
                 const SizedBox(height: 18),
                 const DayForecast(),
                 const SizedBox(height: 18),
