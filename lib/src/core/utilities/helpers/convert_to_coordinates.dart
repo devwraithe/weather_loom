@@ -1,6 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 
-Future<String> convertCoordinates(double lat, double long) async {
+Future<String> convertToCoordinates(double lat, double long) async {
   try {
     List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
     if (placemarks.isNotEmpty) {
