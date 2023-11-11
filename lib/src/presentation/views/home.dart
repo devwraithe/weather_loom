@@ -10,6 +10,7 @@ import '../../core/utilities/helpers/temp_helper.dart';
 import '../bloc/forecast/bloc.dart';
 import '../bloc/forecast/event.dart';
 import '../widgets/city_overview.dart';
+import '../widgets/hourly_forecast.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -80,7 +81,9 @@ class _HomeState extends State<Home> {
                         condition: weather.description,
                         temp: weather.temp.toString(),
                       ),
-                      Text("Something: ${state.result.temp}"),
+                      NewHourlyForecast(
+                        hourly: state.result.hourlyForecast,
+                      ),
                     ],
                   );
                 } else {
