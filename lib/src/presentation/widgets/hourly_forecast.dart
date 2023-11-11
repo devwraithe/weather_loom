@@ -37,7 +37,7 @@ class _NewHourlyForecastState extends State<NewHourlyForecast> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Text(
-              "24-DAYS FORECAST",
+              "24-HOURS FORECAST",
               style: textTheme.labelMedium?.copyWith(
                 color: Colors.grey,
                 letterSpacing: 1.1,

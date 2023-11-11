@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:open_weather/src/data/models/daily_forecast_model.dart';
 import 'package:open_weather/src/data/models/hourly_forecast_model.dart';
 
 import '../../domain/entities/new_weather.dart';
@@ -7,6 +8,7 @@ class NewWeatherModel extends Equatable {
   final num temp, pressure, humidity, windSpeed;
   final String condition, description, icon;
   final List<HourlyForecastModel> hourlyForecast;
+  final List<DailyForecastModel> dailyForecast;
 
   const NewWeatherModel({
     required this.temp,
@@ -17,6 +19,7 @@ class NewWeatherModel extends Equatable {
     required this.description,
     required this.icon,
     required this.hourlyForecast,
+    required this.dailyForecast,
   });
 
   factory NewWeatherModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +28,15 @@ class NewWeatherModel extends Equatable {
       json['hourly'].forEach((forecast) {
         hourlyForecast.add(
           HourlyForecastModel.fromJson(forecast),
+        );
+      });
+    }
+
+    final List<DailyForecastModel> dailyForecast = [];
+    if (json['daily'] != null) {
+      json['daily'].forEach((forecast) {
+        dailyForecast.add(
+          DailyForecastModel.fromJson(forecast),
         );
       });
     }
@@ -38,6 +50,7 @@ class NewWeatherModel extends Equatable {
       description: json['current']['weather'][0]['description'],
       icon: json['current']['weather'][0]['icon'],
       hourlyForecast: hourlyForecast,
+      dailyForecast: dailyForecast,
     );
   }
 
@@ -53,6 +66,9 @@ class NewWeatherModel extends Equatable {
       hourlyForecast: hourlyForecast.map((forecast) {
         return forecast.toEntity();
       }).toList(),
+      dailyForecast: dailyForecast.map((forecast) {
+        return forecast.toEntity();
+      }).toList(),
     );
   }
 
@@ -66,5 +82,6 @@ class NewWeatherModel extends Equatable {
         description,
         icon,
         hourlyForecast,
+        dailyForecast,
       ];
 }

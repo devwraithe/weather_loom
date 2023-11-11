@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:open_weather/src/domain/entities/daily_forecast.dart';
 import 'package:open_weather/src/domain/entities/hourly_forecast.dart';
 
 class NewWeather extends Equatable {
   final num temp, pressure, humidity, windSpeed;
   final String condition, description, icon;
   final List<HourlyForecast> hourlyForecast;
+  final List<DailyForecast> dailyForecast;
 
   const NewWeather({
     required this.temp,
@@ -15,6 +17,7 @@ class NewWeather extends Equatable {
     required this.description,
     required this.icon,
     required this.hourlyForecast,
+    required this.dailyForecast,
   });
 
   @override
@@ -27,5 +30,6 @@ class NewWeather extends Equatable {
         description,
         icon,
         hourlyForecast,
+        dailyForecast,
       ];
 }

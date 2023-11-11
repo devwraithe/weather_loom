@@ -11,6 +11,7 @@ import '../bloc/forecast/bloc.dart';
 import '../bloc/forecast/event.dart';
 import '../widgets/city_overview.dart';
 import '../widgets/hourly_forecast.dart';
+import '../widgets/new_daily_forecast.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -83,6 +84,10 @@ class _HomeState extends State<Home> {
                       ),
                       NewHourlyForecast(
                         hourly: state.result.hourlyForecast,
+                      ),
+                      const SizedBox(height: 18),
+                      NewDailyForecast(
+                        daily: state.result.dailyForecast,
                       ),
                     ],
                   );
