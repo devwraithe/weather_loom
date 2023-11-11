@@ -11,6 +11,7 @@ import 'package:open_weather/src/presentation/widgets/location_item.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../core/constants/imports_barrel.dart';
+import '../../core/utilities/helpers/ui_helpers.dart';
 
 class CityOverview extends StatefulWidget {
   const CityOverview({
@@ -109,11 +110,30 @@ class _CityOverviewState extends State<CityOverview> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: search,
+                decoration: InputDecoration(
+                  hintStyle: AppTextTheme.textTheme.bodyLarge?.copyWith(
+                    height: 1.34,
+                    color: AppColors.grey,
+                  ),
+                  hintText: "Look for a location",
+                  isDense: true,
+                  labelStyle: AppTextTheme.textTheme.bodyLarge?.copyWith(
+                    height: 1.34,
+                    color: AppColors.black,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 14,
+                  ),
+                  filled: true,
+                  fillColor: AppColors.lightGray,
+                  enabledBorder: UiHelpers.inputBorder(AppColors.lightGray),
+                  border: UiHelpers.inputBorder(AppColors.lightGray),
+                ),
                 onChanged: (v) async {
                   context
                       .read<FindLocationBloc>()
                       .add(OnLocationChange(search.text));
-                  // Navigator.pop(context);
                 },
               ),
               const SizedBox(height: 28),
