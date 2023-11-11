@@ -29,25 +29,28 @@ class LocationItem extends StatelessWidget {
           children: [
             const Icon(TablerIcons.map_pin),
             const SizedBox(width: 16),
-            Container(
-              margin: const EdgeInsets.only(top: 1),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: textTheme.bodyLarge?.copyWith(
-                      color: AppColors.black,
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(top: 1),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: AppColors.black,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.grey,
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: AppColors.grey,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

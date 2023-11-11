@@ -107,15 +107,6 @@ class _CityOverviewState extends State<CityOverview> {
                 ),
               ),
               const SizedBox(height: 20),
-              // TextFormField(
-              //   controller: search,
-              //   onFieldSubmitted: (v) async {
-              //     context.read<WeatherBloc>().add(
-              //           OnCityChanged(v),
-              //         );
-              //     Navigator.pop(context);
-              //   },
-              // ),
               TextFormField(
                 controller: search,
                 onChanged: (v) async {
