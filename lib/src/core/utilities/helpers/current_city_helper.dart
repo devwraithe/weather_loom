@@ -1,41 +1,15 @@
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 
-import 'current_location_helper.dart';
-
-Future<String> getCurrentCity() async {
+Future<String> convertCoordinates(double lat, double long) async {
   try {
-    // Get the current location
-    Position position = await getCurrentLocation();
-
-    // Use geocoding to get the city name from latitude and longitude
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
     if (placemarks.isNotEmpty) {
-      // Extract the city name from the placemarks
-      String city = placemarks[0].locality ?? 'Unknown';
-      return city;
+      String location = placemarks[0].locality ?? 'Unknown';
+      return location;
     } else {
       return 'Unknown';
     }
   } catch (e) {
-    // Handle any exceptions that may occur during location retrieval or geocoding
-    throw Exception('Failed to get current city: $e');
-  }
-}
-
-// Return position
-Future<Position> getCoordinates() async {
-  try {
-    // Get the current location
-    Position position = await getCurrentLocation();
-
-    return position;
-  } catch (e) {
-    // Handle any exceptions that may occur during location retrieval or geocoding
-    throw Exception('Failed to get current city: $e');
+    throw Exception('Unable to convert coordinates: $e');
   }
 }
