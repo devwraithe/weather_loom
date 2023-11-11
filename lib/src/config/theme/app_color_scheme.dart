@@ -4,10 +4,15 @@ import 'app_colors.dart';
 
 @immutable
 class AppColorScheme {
-  static const lightColorScheme = ColorScheme.light(
+  static const light = ColorScheme.light(
     primary: AppColors.white,
+    secondary: AppColors.black,
+    background: Colors.white,
+  );
+
+  static const dark = ColorScheme.dark(
+    primary: AppColors.black,
     secondary: AppColors.white,
-    tertiary: AppColors.grey,
     background: AppColors.black,
   );
 }

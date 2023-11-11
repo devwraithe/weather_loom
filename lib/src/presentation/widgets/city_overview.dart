@@ -10,12 +10,14 @@ import '../../core/utilities/helpers/current_date_helper.dart';
 class CityOverview extends StatelessWidget {
   const CityOverview({
     super.key,
-    required this.condition,
-    required this.temp,
+    required this.loading,
     required this.location,
     this.onPressed,
+    required this.condition,
+    required this.temp,
   });
 
+  final bool loading;
   final String condition, temp, location;
   final VoidCallback? onPressed;
 

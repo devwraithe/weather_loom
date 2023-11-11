@@ -3,7 +3,6 @@ import 'package:open_weather/src/presentation/views/home.dart';
 
 class Routes {
   static const String home = '/';
-  static const String search = '/search';
 }
 
 Route<dynamic> controller(RouteSettings settings) {

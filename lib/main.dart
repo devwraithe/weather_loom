@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:open_weather/src/app.dart';
 
-import 'src/core/utilities/services/service_locator.dart' as injector;
+import 'src/core/utilities/services/service_locator.dart' as di;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  injector.init();
-  runApp(
-    const OpenWeather(),
-  );
+  di.init();
+
+  runApp(const OpenWeather());
 }

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:open_weather/src/config/theme/app_colors.dart';
@@ -29,8 +28,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   String condition = "";
   String? currentLocation;
 
@@ -46,7 +43,6 @@ class _HomeState extends State<Home> {
       coordinates.latitude,
       coordinates.longitude,
     );
-    debugPrint("Current location: $currentLocation");
     context.read<NewForecastBloc>().add(
           OnCoordinatesChange(
             coordinates.latitude.toString(),
@@ -58,63 +54,102 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            CachedNetworkImage(
-              imageUrl: weatherImage(condition),
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height,
-              fit: BoxFit.cover,
-            ),
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height,
-              color: AppColors.black.withOpacity(0.6),
-            ),
-            BlocConsumer<NewForecastBloc, NewForecastState>(
-              listener: (context, state) {
-                if (state is NewForecastLoaded) {
-                  setState(() {
-                    condition = state.result.condition;
-                  });
-                }
-              },
-              builder: (context, state) {
-                if (state is NewForecastLoading) {
-                  return const CupertinoActivityIndicator();
-                } else if (state is NewForecastError) {
-                  return Text(state.message);
-                } else if (state is NewForecastLoaded) {
-                  final weather = state.result;
-                  condition = weather.condition;
+      body: Stack(
+        children: [
+          CachedNetworkImage(
+            imageUrl: weatherImage(condition),
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.cover,
+            fadeInDuration: const Duration(milliseconds: 0),
+          ),
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            color: AppColors.black.withOpacity(0.5),
+          ),
+          BlocConsumer<NewForecastBloc, NewForecastState>(
+            listener: (context, state) {
+              if (state is NewForecastLoaded) {
+                setState(() => condition = state.result.condition);
+              }
+            },
+            builder: (context, state) {
+              final loading = state is NewForecastLoading;
 
-                  return Column(
-                    children: [
-                      CityOverview(
-                        condition: weather.description,
-                        temp: weather.temp.toString(),
-                        location: currentLocation ?? "Unknown",
-                        onPressed: () => _locationsList(),
-                      ),
-                      NewHourlyForecast(
-                        hourly: state.result.hourlyForecast,
-                      ),
-                      const SizedBox(height: 18),
-                      NewDailyForecast(
-                        daily: state.result.dailyForecast,
-                      ),
-                    ],
-                  );
-                } else {
-                  return const SizedBox();
-                }
-              },
-            ),
-            // const WeatherAttributes(),
-          ],
-        ),
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CityOverview(
+                      loading: loading,
+                      condition: state is NewForecastLoaded
+                          ? state.result.description
+                          : "Not available",
+                      temp: state is NewForecastLoaded
+                          ? state.result.temp.toString()
+                          : "0",
+                      location: currentLocation ?? "Unknown",
+                      onPressed: () => _locationsList(),
+                    ),
+                    const SizedBox(height: 18),
+                    NewHourlyForecast(
+                      loading: loading,
+                      forecast: state is NewForecastLoaded
+                          ? state.result.hourlyForecast
+                          : [],
+                    ),
+                    const SizedBox(height: 18),
+                    NewDailyForecast(
+                      loading: loading,
+                      daily: state is NewForecastLoaded
+                          ? state.result.dailyForecast
+                          : [],
+                    ),
+                    const SizedBox(height: 18),
+                  ],
+                ),
+              );
+            },
+          ),
+          // BlocConsumer<NewForecastBloc, NewForecastState>(
+          //   listener: (context, state) {
+          //     if (state is NewForecastLoaded) {
+          //       setState(() => condition = state.result.condition);
+          //     }
+          //   },
+          //   builder: (context, state) {
+          //     if (state is NewForecastLoading) {
+          //       return const CupertinoActivityIndicator();
+          //     } else if (state is NewForecastError) {
+          //       return Text(state.message);
+          //     } else if (state is NewForecastLoaded) {
+          //       final weather = state.result;
+          //       condition = weather.condition;
+          //
+          //       return SingleChildScrollView(
+          //         child: Column(
+          //           children: [
+          //             CityOverview(
+          //               condition: weather.description,
+          //               temp: weather.temp.toString(),
+          //               location: currentLocation ?? "Unknown",
+          //               onPressed: () => _locationsList(),
+          //             ),
+          //             const HourlyShimmer(),
+          //             const SizedBox(height: 18),
+          //             NewHourlyForecast(hourly: weather.hourlyForecast),
+          //             const SizedBox(height: 18),
+          //             NewDailyForecast(daily: weather.dailyForecast),
+          //           ],
+          //         ),
+          //       );
+          //     } else {
+          //       return const SizedBox();
+          //     }
+          //   },
+          // ),
+          // const WeatherAttributes(),
+        ],
       ),
     );
   }

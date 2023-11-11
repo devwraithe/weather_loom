@@ -29,12 +29,12 @@ class OpenWeather extends StatelessWidget {
         BlocProvider(create: (_) => injector.locator<NewForecastBloc>()),
       ],
       child: MaterialApp(
-        title: 'Open Weather',
+        title: 'WeatherLoom',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
+        theme: AppTheme.light,
         themeMode: ThemeMode.light,
-        home: const Home(),
         onGenerateRoute: controller,
+        home: const Home(),
         initialRoute: Routes.home,
       ),
     );
