@@ -2,26 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:open_weather/src/config/theme/app_colors.dart';
 import 'package:open_weather/src/config/theme/app_text_theme.dart';
-import 'package:open_weather/src/core/constants/imports_barrel.dart';
 
 class LocationItem extends StatelessWidget {
   const LocationItem({
     super.key,
     required this.title,
     required this.subtitle,
+    this.onPressed,
   });
 
   final String title, subtitle;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     const textTheme = AppTextTheme.textTheme;
 
     return GestureDetector(
-      onTap: () async {
-        context.read<WeatherBloc>().add(OnCityChanged(title));
-        Navigator.pop(context);
-      },
+      onTap: onPressed,
       child: Container(
         margin: const EdgeInsets.only(bottom: 18),
         child: Row(
