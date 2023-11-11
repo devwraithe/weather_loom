@@ -7,7 +7,7 @@ class ApiUrls {
   static const String units = '&units=metric';
 
   static forecast(String lat, String lon) {
-    return "$baseUrl/onecall?lat=$lat&lon=$lon&$apiKey";
+    return "$baseUrl/onecall?lat=$lat&lon=$lon&$units&$apiKey";
   }
 
   static String currentWeatherByName(String city) =>

@@ -12,66 +12,93 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../core/constants/imports_barrel.dart';
 
-class CityOverview extends StatefulWidget {
-  const CityOverview({
+class OldCityOverview extends StatefulWidget {
+  const OldCityOverview({
     super.key,
-    required this.condition,
-    required this.temp,
+    required this.onWeatherAvailable,
   });
 
-  final String condition, temp;
+  final Function(String) onWeatherAvailable;
 
   @override
-  State<CityOverview> createState() => _CityOverviewState();
+  State<OldCityOverview> createState() => _OldCityOverviewState();
 }
 
-class _CityOverviewState extends State<CityOverview> {
+class _OldCityOverviewState extends State<OldCityOverview> {
+  // In your widget, when the temperature is available:
+  void updateWeather(String weather) {
+    widget.onWeatherAvailable(weather);
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 60, top: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () => _locationsList(),
-            child: Container(
-              alignment: Alignment.topRight,
-              margin: const EdgeInsets.only(
-                right: 18,
-                top: 16,
-              ),
-              child: const Icon(
-                TablerIcons.list,
-                color: AppColors.white,
-                size: 26,
-              ),
+    return BlocConsumer<WeatherBloc, WeatherState>(
+      listener: (context, state) {
+        if (state is WeatherHasData) {
+          updateWeather(state.result.main);
+        }
+      },
+      builder: (context, state) {
+        if (state is WeatherLoading) {
+          return _buildShimmerLoader();
+        }
+        if (state is WeatherHasData) {
+          final result = state.result;
+
+          final num _lat = result.lat;
+          final num _lon = result.lon;
+
+          context.read<ForecastBloc>().add(HourlyForecast(_lat, _lon));
+          context.read<DailyForecastBloc>().add(DailyForecast(_lat, _lon));
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 60, top: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () => _locationsList(),
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    margin: const EdgeInsets.only(
+                      right: 18,
+                      top: 16,
+                    ),
+                    child: const Icon(
+                      TablerIcons.list,
+                      color: AppColors.white,
+                      size: 26,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Text(
+                  result.cityName,
+                  style: textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "${result.temperature.round()}${Constants.deg}",
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  capitalizeLetter(state.result.description),
+                  style: textTheme.bodyLarge,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  currentDate(),
+                  style: textTheme.bodyMedium,
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 40),
-          Text(
-            "Moria",
-            style: textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            "${widget.temp}${Constants.deg}",
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            capitalizeLetter(widget.condition),
-            style: textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            currentDate(),
-            style: textTheme.bodyMedium,
-          ),
-        ],
-      ),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 
