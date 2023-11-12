@@ -4,8 +4,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:open_weather/src/config/theme/app_colors.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_city_helper.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_location_helper.dart';
+import 'package:open_weather/src/domain/entities/new_weather.dart';
 import 'package:open_weather/src/presentation/bloc/forecast/state.dart';
+import 'package:open_weather/src/presentation/widgets/forecast_attributes.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:timezone/data/latest.dart' as timezone;
 
 import '../../config/theme/app_text_theme.dart';
 import '../../core/constants/imports_barrel.dart';
@@ -34,6 +37,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    timezone.initializeTimeZones();
     _getCurrentWeather();
   }
 
@@ -71,7 +75,7 @@ class _HomeState extends State<Home> {
           BlocConsumer<NewForecastBloc, NewForecastState>(
             listener: (context, state) {
               if (state is NewForecastLoaded) {
-                setState(() => condition = state.result.condition);
+                setState(() => condition = state.result.condition!);
               }
             },
             builder: (context, state) {
@@ -83,7 +87,7 @@ class _HomeState extends State<Home> {
                     CityOverview(
                       loading: loading,
                       condition: state is NewForecastLoaded
-                          ? state.result.description
+                          ? state.result.description!
                           : "Not available",
                       temp: state is NewForecastLoaded
                           ? state.result.temp.toString()
@@ -95,15 +99,22 @@ class _HomeState extends State<Home> {
                     NewHourlyForecast(
                       loading: loading,
                       forecast: state is NewForecastLoaded
-                          ? state.result.hourlyForecast
+                          ? state.result.hourlyForecast!
                           : [],
                     ),
                     const SizedBox(height: 18),
                     NewDailyForecast(
                       loading: loading,
                       daily: state is NewForecastLoaded
-                          ? state.result.dailyForecast
+                          ? state.result.dailyForecast!
                           : [],
+                    ),
+                    const SizedBox(height: 18),
+                    ForecastAttributes(
+                      loading: loading,
+                      attributes: state is NewForecastLoaded
+                          ? state.result
+                          : const NewWeather(),
                     ),
                     const SizedBox(height: 18),
                   ],

@@ -3,21 +3,39 @@ import 'package:open_weather/src/domain/entities/daily_forecast.dart';
 import 'package:open_weather/src/domain/entities/hourly_forecast.dart';
 
 class NewWeather extends Equatable {
-  final num temp, pressure, humidity, windSpeed;
-  final String condition, description, icon;
-  final List<HourlyForecast> hourlyForecast;
-  final List<DailyForecast> dailyForecast;
+  final num? temp,
+      pressure,
+      humidity,
+      windSpeed,
+      windDeg,
+      windGust,
+      feelsLike,
+      uvIndex,
+      sunset,
+      sunrise,
+      dewPoint;
+  final String? timezone, condition, description, icon;
+  final List<HourlyForecast>? hourlyForecast;
+  final List<DailyForecast>? dailyForecast;
 
   const NewWeather({
-    required this.temp,
-    required this.pressure,
-    required this.humidity,
-    required this.windSpeed,
-    required this.condition,
-    required this.description,
-    required this.icon,
-    required this.hourlyForecast,
-    required this.dailyForecast,
+    this.temp,
+    this.pressure,
+    this.humidity,
+    this.windSpeed,
+    this.windDeg,
+    this.windGust,
+    this.feelsLike,
+    this.uvIndex,
+    this.sunset,
+    this.sunrise,
+    this.dewPoint,
+    this.timezone,
+    this.condition,
+    this.description,
+    this.icon,
+    this.hourlyForecast,
+    this.dailyForecast,
   });
 
   @override
@@ -26,6 +44,14 @@ class NewWeather extends Equatable {
         pressure,
         humidity,
         windSpeed,
+        windDeg,
+        windGust,
+        feelsLike,
+        uvIndex,
+        sunset,
+        sunrise,
+        dewPoint,
+        timezone,
         condition,
         description,
         icon,
