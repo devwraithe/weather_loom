@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:open_weather/src/config/theme/app_text_theme.dart';
 
-import '../../../../core/utilities/helpers/ui_helpers.dart';
 import 'attribute_container.dart';
 
 class UviAttribute extends StatelessWidget {
@@ -18,13 +18,21 @@ class UviAttribute extends StatelessWidget {
     return AttributeContainer(
       title: "UV INDEX",
       loading: loading,
-      child: Column(
-        children: [
-          UiHelpers.attributeText(
-            "Index",
-            uvi,
-          ),
-        ],
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Spacer(),
+            Text(
+              uvi.toString(),
+              style: AppTextTheme.textTheme.headlineLarge,
+            ),
+            const SizedBox(height: 2),
+            const Text("Low"),
+            const SizedBox(height: 14),
+            Text(uvi > 0 ? "----" : "--"),
+          ],
+        ),
       ),
     );
   }

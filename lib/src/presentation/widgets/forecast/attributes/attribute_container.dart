@@ -26,7 +26,7 @@ class AttributeContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         height: 180,
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 6),
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

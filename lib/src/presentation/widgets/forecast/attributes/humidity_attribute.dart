@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utilities/helpers/ui_helpers.dart';
+import '../../../../config/theme/app_text_theme.dart';
 import 'attribute_container.dart';
 
 class HumidityAttribute extends StatelessWidget {
@@ -19,12 +19,18 @@ class HumidityAttribute extends StatelessWidget {
     return AttributeContainer(
       title: "HUMIDITY",
       loading: loading,
-      child: Column(
-        children: [
-          UiHelpers.attributeText("Humidity", humidity),
-          const SizedBox(height: 6),
-          UiHelpers.attributeText("Dew Point", dewPoint),
-        ],
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "${humidity.toString()}%",
+              style: AppTextTheme.textTheme.headlineLarge,
+            ),
+            const Spacer(),
+            Text("The dew point is $dewPoint% right now."),
+          ],
+        ),
       ),
     );
   }
