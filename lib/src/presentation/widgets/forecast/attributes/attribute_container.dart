@@ -11,7 +11,7 @@ class AttributeContainer extends StatelessWidget {
     required this.title,
   });
 
-  final bool loading;
+  final bool? loading;
   final Widget child;
   final String title;
 
@@ -21,7 +21,7 @@ class AttributeContainer extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white.withOpacity(
-            loading ? 0.2 : 0.1,
+            loading! ? 0.2 : 0.1,
           ),
           borderRadius: BorderRadius.circular(12),
         ),

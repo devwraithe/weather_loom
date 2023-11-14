@@ -5,7 +5,7 @@ import 'package:open_weather/src/data/models/hourly_forecast_model.dart';
 import '../../domain/entities/new_weather.dart';
 
 class NewWeatherModel extends Equatable {
-  final num? temp,
+  final num temp,
       pressure,
       humidity,
       windSpeed,
@@ -16,28 +16,28 @@ class NewWeatherModel extends Equatable {
       sunset,
       sunrise,
       dewPoint;
-  final String? timezone, condition, description, icon;
-  final List<HourlyForecastModel>? hourlyForecast;
-  final List<DailyForecastModel>? dailyForecast;
+  final String timezone, condition, description, icon;
+  final List<HourlyForecastModel> hourlyForecast;
+  final List<DailyForecastModel> dailyForecast;
 
   const NewWeatherModel({
-    this.temp,
-    this.pressure,
-    this.humidity,
-    this.windSpeed,
-    this.windDeg,
-    this.windGust,
-    this.feelsLike,
-    this.uvIndex,
-    this.sunset,
-    this.sunrise,
-    this.dewPoint,
-    this.timezone,
-    this.condition,
-    this.description,
-    this.icon,
-    this.hourlyForecast,
-    this.dailyForecast,
+    required this.temp,
+    required this.pressure,
+    required this.humidity,
+    required this.windSpeed,
+    required this.windDeg,
+    required this.windGust,
+    required this.feelsLike,
+    required this.uvIndex,
+    required this.sunset,
+    required this.sunrise,
+    required this.dewPoint,
+    required this.timezone,
+    required this.condition,
+    required this.description,
+    required this.icon,
+    required this.hourlyForecast,
+    required this.dailyForecast,
   });
 
   factory NewWeatherModel.fromJson(Map<String, dynamic> json) {
@@ -60,8 +60,8 @@ class NewWeatherModel extends Equatable {
     }
 
     return NewWeatherModel(
-      temp: json['current']['temp'].round() ?? 0,
-      pressure: json['current']['pressure'] ?? 0,
+      temp: json['current']['temp'].round(),
+      pressure: json['current']['pressure'],
       humidity: json['current']['humidity'] ?? 0,
       windSpeed: json['current']['wind_speed'] ?? 0,
       windDeg: json['current']['wind_deg'] ?? 0,

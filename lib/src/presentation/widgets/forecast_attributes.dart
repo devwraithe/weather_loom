@@ -16,7 +16,7 @@ class ForecastAttributes extends StatefulWidget {
   });
 
   final bool loading;
-  final NewWeather attributes;
+  final NewWeather? attributes;
 
   @override
   State<ForecastAttributes> createState() => _ForecastAttributesState();
@@ -33,14 +33,14 @@ class _ForecastAttributesState extends State<ForecastAttributes> {
             children: [
               TempAttribute(
                 loading: widget.loading,
-                feelsLike: widget.attributes.feelsLike!,
-                humidity: widget.attributes.humidity!,
+                feelsLike: widget.attributes!.feelsLike ?? 0,
+                humidity: widget.attributes!.humidity ?? 0,
               ),
               const SizedBox(width: 18),
               WindAttribute(
                 loading: widget.loading,
-                speed: widget.attributes.windSpeed!,
-                gust: widget.attributes.windGust!,
+                speed: widget.attributes!.windSpeed ?? 0,
+                gust: widget.attributes!.windGust ?? 0,
               ),
             ],
           ),
@@ -49,14 +49,14 @@ class _ForecastAttributesState extends State<ForecastAttributes> {
             children: [
               SunsetAttribute(
                 loading: widget.loading,
-                sunset: widget.attributes.sunset!,
-                sunrise: widget.attributes.sunrise!,
-                timezone: widget.attributes.timezone!,
+                sunset: widget.attributes!.sunset,
+                sunrise: widget.attributes!.sunrise,
+                timezone: widget.attributes!.timezone,
               ),
               const SizedBox(width: 18),
               UviAttribute(
                 loading: widget.loading,
-                uvi: widget.attributes.uvIndex!,
+                uvi: widget.attributes!.uvIndex ?? 0,
               ),
             ],
           ),
@@ -65,13 +65,13 @@ class _ForecastAttributesState extends State<ForecastAttributes> {
             children: [
               HumidityAttribute(
                 loading: widget.loading,
-                humidity: widget.attributes.humidity!,
-                dewPoint: widget.attributes.dewPoint!,
+                humidity: widget.attributes!.humidity ?? 0,
+                dewPoint: widget.attributes!.dewPoint ?? 0,
               ),
               const SizedBox(width: 18),
               PressureAttribute(
                 loading: widget.loading,
-                pressure: widget.attributes.pressure!,
+                pressure: widget.attributes!.pressure ?? 0,
               ),
             ],
           ),

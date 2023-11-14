@@ -2,10 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 String convertTimestamp(int timestamp, {String? timeZone}) {
-  if (timeZone == null) {
-    // Use UTC if time zone is not provided
-    timeZone = 'UTC';
-  }
+  timeZone ??= 'UTC';
 
   // Get the time zone
   final location = tz.getLocation(timeZone);

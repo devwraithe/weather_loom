@@ -7,15 +7,15 @@ import 'attribute_container.dart';
 class SunsetAttribute extends StatelessWidget {
   const SunsetAttribute({
     super.key,
-    required this.loading,
-    required this.sunset,
-    required this.sunrise,
-    required this.timezone,
+    this.loading,
+    this.sunset,
+    this.sunrise,
+    this.timezone,
   });
 
-  final bool loading;
-  final num sunset, sunrise;
-  final String timezone;
+  final bool? loading;
+  final num? sunset, sunrise;
+  final String? timezone;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class SunsetAttribute extends StatelessWidget {
           UiHelpers.attributeText(
             "Sunrise",
             convertTimestamp(
-              sunrise.toInt(),
+              sunrise!.toInt(),
               timeZone: timezone,
             ),
           ),
@@ -35,7 +35,7 @@ class SunsetAttribute extends StatelessWidget {
           UiHelpers.attributeText(
             "Sunset",
             convertTimestamp(
-              sunset.toInt(),
+              sunset!.toInt(),
               timeZone: timezone,
             ),
           ),

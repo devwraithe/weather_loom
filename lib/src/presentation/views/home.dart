@@ -4,9 +4,9 @@ import 'package:geocoding/geocoding.dart';
 import 'package:open_weather/src/config/theme/app_colors.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_city_helper.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_location_helper.dart';
-import 'package:open_weather/src/domain/entities/new_weather.dart';
 import 'package:open_weather/src/presentation/bloc/forecast/state.dart';
 import 'package:open_weather/src/presentation/widgets/forecast_attributes.dart';
+import 'package:open_weather/src/presentation/widgets/shimmer/attributes_shimmer.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timezone/data/latest.dart' as timezone;
 
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
                     CityOverview(
                       loading: loading,
                       condition: state is NewForecastLoaded
-                          ? state.result.description!
+                          ? state.result.description
                           : "Not available",
                       temp: state is NewForecastLoaded
                           ? state.result.temp.toString()
@@ -99,67 +99,29 @@ class _HomeState extends State<Home> {
                     NewHourlyForecast(
                       loading: loading,
                       forecast: state is NewForecastLoaded
-                          ? state.result.hourlyForecast!
+                          ? state.result.hourlyForecast
                           : [],
                     ),
                     const SizedBox(height: 18),
                     NewDailyForecast(
                       loading: loading,
                       daily: state is NewForecastLoaded
-                          ? state.result.dailyForecast!
+                          ? state.result.dailyForecast
                           : [],
                     ),
                     const SizedBox(height: 18),
-                    ForecastAttributes(
-                      loading: loading,
-                      attributes: state is NewForecastLoaded
-                          ? state.result
-                          : const NewWeather(),
-                    ),
+                    state is NewForecastLoaded
+                        ? ForecastAttributes(
+                            loading: loading,
+                            attributes: state.result,
+                          )
+                        : const AttributesShimmer(),
                     const SizedBox(height: 18),
                   ],
                 ),
               );
             },
           ),
-          // BlocConsumer<NewForecastBloc, NewForecastState>(
-          //   listener: (context, state) {
-          //     if (state is NewForecastLoaded) {
-          //       setState(() => condition = state.result.condition);
-          //     }
-          //   },
-          //   builder: (context, state) {
-          //     if (state is NewForecastLoading) {
-          //       return const CupertinoActivityIndicator();
-          //     } else if (state is NewForecastError) {
-          //       return Text(state.message);
-          //     } else if (state is NewForecastLoaded) {
-          //       final weather = state.result;
-          //       condition = weather.condition;
-          //
-          //       return SingleChildScrollView(
-          //         child: Column(
-          //           children: [
-          //             CityOverview(
-          //               condition: weather.description,
-          //               temp: weather.temp.toString(),
-          //               location: currentLocation ?? "Unknown",
-          //               onPressed: () => _locationsList(),
-          //             ),
-          //             const HourlyShimmer(),
-          //             const SizedBox(height: 18),
-          //             NewHourlyForecast(hourly: weather.hourlyForecast),
-          //             const SizedBox(height: 18),
-          //             NewDailyForecast(daily: weather.dailyForecast),
-          //           ],
-          //         ),
-          //       );
-          //     } else {
-          //       return const SizedBox();
-          //     }
-          //   },
-          // ),
-          // const WeatherAttributes(),
         ],
       ),
     );

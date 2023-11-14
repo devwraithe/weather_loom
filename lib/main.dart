@@ -7,5 +7,5 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   di.init();
 
-  runApp(const OpenWeather());
+  runApp(const WeatherLoom());
 }
