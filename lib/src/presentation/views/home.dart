@@ -228,11 +228,19 @@ class _HomeState extends State<Home> {
               BlocBuilder<FindLocationBloc, FindLocationState>(
                 builder: (context, state) {
                   if (state is FindLocationLoading) {
-                    return const CircularProgressIndicator(
-                      color: AppColors.black,
+                    return Container(
+                      margin: const EdgeInsets.only(top: 180),
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(
+                        color: AppColors.black,
+                      ),
                     );
                   } else if (state is FindLocationError) {
-                    return Text(state.message);
+                    return Container(
+                      margin: const EdgeInsets.only(top: 180),
+                      alignment: Alignment.center,
+                      child: Text(state.message),
+                    );
                   } else if (state is FindLocationSuccess) {
                     return Column(
                       children: [
@@ -256,9 +264,15 @@ class _HomeState extends State<Home> {
                       ],
                     );
                   } else {
-                    return const Text(
-                      "Start typing to find location",
-                      style: TextStyle(color: Colors.black),
+                    return Container(
+                      margin: const EdgeInsets.only(top: 180),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Start typing to find location",
+                        style: AppTextTheme.textTheme.bodyLarge?.copyWith(
+                          color: AppColors.black,
+                        ),
+                      ),
                     );
                   }
                 },
