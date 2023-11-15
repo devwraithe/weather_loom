@@ -5,7 +5,10 @@ import 'package:open_weather/src/config/theme/app_colors.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_city_helper.dart';
 import 'package:open_weather/src/core/utilities/helpers/current_location_helper.dart';
 import 'package:open_weather/src/presentation/bloc/forecast/state.dart';
+import 'package:open_weather/src/presentation/widgets/forecast_attributes.dart';
+import 'package:open_weather/src/presentation/widgets/shimmer/attributes_shimmer.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:timezone/data/latest.dart' as timezone;
 
 import '../../config/theme/app_text_theme.dart';
 import '../../core/constants/imports_barrel.dart';
@@ -18,6 +21,7 @@ import '../bloc/forecast/bloc.dart';
 import '../bloc/forecast/event.dart';
 import '../widgets/city_overview.dart';
 import '../widgets/hourly_forecast.dart';
+import '../widgets/loading/overview_loading.dart';
 import '../widgets/location_item.dart';
 import '../widgets/new_daily_forecast.dart';
 
@@ -34,6 +38,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    timezone.initializeTimeZones();
     _getCurrentWeather();
   }
 
@@ -71,7 +76,7 @@ class _HomeState extends State<Home> {
           BlocConsumer<NewForecastBloc, NewForecastState>(
             listener: (context, state) {
               if (state is NewForecastLoaded) {
-                setState(() => condition = state.result.condition);
+                setState(() => condition = state.result.condition!);
               }
             },
             builder: (context, state) {
@@ -80,17 +85,14 @@ class _HomeState extends State<Home> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    CityOverview(
-                      loading: loading,
-                      condition: state is NewForecastLoaded
-                          ? state.result.description
-                          : "Not available",
-                      temp: state is NewForecastLoaded
-                          ? state.result.temp.toString()
-                          : "0",
-                      location: currentLocation ?? "Unknown",
-                      onPressed: () => _locationsList(),
-                    ),
+                    state is NewForecastLoaded
+                        ? CityOverview(
+                            condition: state.result.description,
+                            temp: state.result.temp.toString(),
+                            location: currentLocation!,
+                            onPressed: () => _locationsList(),
+                          )
+                        : const OverviewLoading(),
                     const SizedBox(height: 18),
                     NewHourlyForecast(
                       loading: loading,
@@ -106,49 +108,18 @@ class _HomeState extends State<Home> {
                           : [],
                     ),
                     const SizedBox(height: 18),
+                    state is NewForecastLoaded
+                        ? ForecastAttributes(
+                            loading: loading,
+                            attributes: state.result,
+                          )
+                        : const AttributesShimmer(),
+                    const SizedBox(height: 18),
                   ],
                 ),
               );
             },
           ),
-          // BlocConsumer<NewForecastBloc, NewForecastState>(
-          //   listener: (context, state) {
-          //     if (state is NewForecastLoaded) {
-          //       setState(() => condition = state.result.condition);
-          //     }
-          //   },
-          //   builder: (context, state) {
-          //     if (state is NewForecastLoading) {
-          //       return const CupertinoActivityIndicator();
-          //     } else if (state is NewForecastError) {
-          //       return Text(state.message);
-          //     } else if (state is NewForecastLoaded) {
-          //       final weather = state.result;
-          //       condition = weather.condition;
-          //
-          //       return SingleChildScrollView(
-          //         child: Column(
-          //           children: [
-          //             CityOverview(
-          //               condition: weather.description,
-          //               temp: weather.temp.toString(),
-          //               location: currentLocation ?? "Unknown",
-          //               onPressed: () => _locationsList(),
-          //             ),
-          //             const HourlyShimmer(),
-          //             const SizedBox(height: 18),
-          //             NewHourlyForecast(hourly: weather.hourlyForecast),
-          //             const SizedBox(height: 18),
-          //             NewDailyForecast(daily: weather.dailyForecast),
-          //           ],
-          //         ),
-          //       );
-          //     } else {
-          //       return const SizedBox();
-          //     }
-          //   },
-          // ),
-          // const WeatherAttributes(),
         ],
       ),
     );
@@ -217,11 +188,19 @@ class _HomeState extends State<Home> {
               BlocBuilder<FindLocationBloc, FindLocationState>(
                 builder: (context, state) {
                   if (state is FindLocationLoading) {
-                    return const CircularProgressIndicator(
-                      color: AppColors.black,
+                    return Container(
+                      margin: const EdgeInsets.only(top: 180),
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(
+                        color: AppColors.black,
+                      ),
                     );
                   } else if (state is FindLocationError) {
-                    return Text(state.message);
+                    return Container(
+                      margin: const EdgeInsets.only(top: 180),
+                      alignment: Alignment.center,
+                      child: Text(state.message),
+                    );
                   } else if (state is FindLocationSuccess) {
                     return Column(
                       children: [
@@ -245,9 +224,15 @@ class _HomeState extends State<Home> {
                       ],
                     );
                   } else {
-                    return const Text(
-                      "Start typing to find location",
-                      style: TextStyle(color: Colors.black),
+                    return Container(
+                      margin: const EdgeInsets.only(top: 180),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Start typing to find location",
+                        style: AppTextTheme.textTheme.bodyLarge?.copyWith(
+                          color: AppColors.black,
+                        ),
+                      ),
                     );
                   }
                 },

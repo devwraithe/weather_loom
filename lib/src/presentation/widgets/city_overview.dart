@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:open_weather/src/config/theme/app_text_theme.dart';
 
-import '../../config/theme/app_colors.dart';
 import '../../core/constants/imports_barrel.dart';
 import '../../core/utilities/constants.dart';
 import '../../core/utilities/helpers/current_date_helper.dart';
@@ -10,14 +8,12 @@ import '../../core/utilities/helpers/current_date_helper.dart';
 class CityOverview extends StatelessWidget {
   const CityOverview({
     super.key,
-    required this.loading,
     required this.location,
     this.onPressed,
     required this.condition,
     required this.temp,
   });
 
-  final bool loading;
   final String condition, temp, location;
   final VoidCallback? onPressed;
 
@@ -32,18 +28,7 @@ class CityOverview extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: onPressed,
-            child: Container(
-              alignment: Alignment.topRight,
-              margin: const EdgeInsets.only(
-                right: 18,
-                top: 16,
-              ),
-              child: const Icon(
-                TablerIcons.list,
-                color: AppColors.white,
-                size: 26,
-              ),
-            ),
+            child: Constants.listIcon,
           ),
           const SizedBox(height: 40),
           Text(

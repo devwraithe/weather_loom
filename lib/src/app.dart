@@ -8,8 +8,8 @@ import '../src/core/utilities/services/service_locator.dart' as injector;
 import 'config/theme/app_theme.dart';
 import 'core/constants/imports_barrel.dart';
 
-class OpenWeather extends StatelessWidget {
-  const OpenWeather({Key? key}) : super(key: key);
+class WeatherLoom extends StatelessWidget {
+  const WeatherLoom({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

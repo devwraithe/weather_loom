@@ -5,8 +5,18 @@ import 'package:open_weather/src/data/models/hourly_forecast_model.dart';
 import '../../domain/entities/new_weather.dart';
 
 class NewWeatherModel extends Equatable {
-  final num temp, pressure, humidity, windSpeed;
-  final String condition, description, icon;
+  final num temp,
+      pressure,
+      humidity,
+      windSpeed,
+      windGust,
+      windDeg,
+      feelsLike,
+      uvIndex,
+      sunset,
+      sunrise,
+      dewPoint;
+  final String timezone, condition, description, icon;
   final List<HourlyForecastModel> hourlyForecast;
   final List<DailyForecastModel> dailyForecast;
 
@@ -15,6 +25,14 @@ class NewWeatherModel extends Equatable {
     required this.pressure,
     required this.humidity,
     required this.windSpeed,
+    required this.windDeg,
+    required this.windGust,
+    required this.feelsLike,
+    required this.uvIndex,
+    required this.sunset,
+    required this.sunrise,
+    required this.dewPoint,
+    required this.timezone,
     required this.condition,
     required this.description,
     required this.icon,
@@ -44,11 +62,19 @@ class NewWeatherModel extends Equatable {
     return NewWeatherModel(
       temp: json['current']['temp'].round(),
       pressure: json['current']['pressure'],
-      humidity: json['current']['humidity'],
-      windSpeed: json['current']['wind_speed'],
-      condition: json['current']['weather'][0]['main'],
-      description: json['current']['weather'][0]['description'],
-      icon: json['current']['weather'][0]['icon'],
+      humidity: json['current']['humidity'] ?? 0,
+      windSpeed: json['current']['wind_speed'] ?? 0,
+      windDeg: json['current']['wind_deg'] ?? 0,
+      windGust: json['current']['wind_gust'] ?? 0,
+      feelsLike: json['current']['feels_like'].round() ?? 0,
+      uvIndex: json['current']['uvi'].round() ?? 0,
+      sunset: json['current']['sunset'] ?? 0,
+      sunrise: json['current']['sunrise'] ?? 0,
+      dewPoint: json['current']['dew_point'].round() ?? 0,
+      timezone: json['timezone'] ?? "",
+      condition: json['current']['weather'][0]['main'] ?? "",
+      description: json['current']['weather'][0]['description'] ?? "",
+      icon: json['current']['weather'][0]['icon'] ?? "",
       hourlyForecast: hourlyForecast,
       dailyForecast: dailyForecast,
     );
@@ -60,13 +86,21 @@ class NewWeatherModel extends Equatable {
       pressure: pressure,
       humidity: humidity,
       windSpeed: windSpeed,
+      windDeg: windDeg,
+      windGust: windGust,
+      feelsLike: feelsLike,
+      uvIndex: uvIndex,
+      sunset: sunset,
+      sunrise: sunrise,
+      dewPoint: dewPoint,
+      timezone: timezone,
       condition: condition,
       description: description,
       icon: icon,
-      hourlyForecast: hourlyForecast.map((forecast) {
+      hourlyForecast: hourlyForecast!.map((forecast) {
         return forecast.toEntity();
       }).toList(),
-      dailyForecast: dailyForecast.map((forecast) {
+      dailyForecast: dailyForecast!.map((forecast) {
         return forecast.toEntity();
       }).toList(),
     );
@@ -78,6 +112,14 @@ class NewWeatherModel extends Equatable {
         pressure,
         humidity,
         windSpeed,
+        windDeg,
+        windGust,
+        feelsLike,
+        uvIndex,
+        sunset,
+        sunrise,
+        dewPoint,
+        timezone,
         condition,
         description,
         icon,
