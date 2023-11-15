@@ -1,71 +1,38 @@
-# Open Weather - Weather Forecast Application
+# Weather Loom
 
-Open Weather is a test mobile application to predict weather conditions. It was developed using Dart and Flutter with Flutter BLoC for state management and the API is from <a href="https://api.openweathermap.org/">Open Weather API</a>. The architecture is a combination of Uncle Bob's Clean Architecture and BLoC which is the recommended pattern for Flutter applications.
+Weather Loom is a mobile application that shows up-to-date information and weather forecasts using data from the Open Weather API. The power of Dart & Flutter along with BLoC for state management as well as the API from <a href="https://api.openweathermap.org/">Open Weather</a> has been harnessed to bring this product to life. Inspiration for the design is in most part from the iOS Weather application.
 
-## :camera: Screenshots
+## Table of Contents
+- [Getting Started](#getting-started)
 
-<div style="display: flex;">
-  <img src="assets/screenshots/default.png" width="250" />
-  <img src="assets/screenshots/result.png" width="250" />
-  <img src="assets/screenshots/error.png" width="250" />
-</div>
+## Getting Started
 
-## :clipboard: Requirements
+### Installation
 
-- Operating System (Windows, Linux or MacOS)
-- Flutter must be installed on the Operating System
-- Knowledge of the Flutter Framework
-- IDE (Visual Studio Code, Android Studio e.t.c)
-- Mobile Emulator or Mobile Device
-- Hands to code :smile:
-
-## :pushpin: Dependencies
-
-- dartz: ^0.10.1
-- equatable: ^2.0.3
-- http: ^0.13.5
-- get_it: ^7.2.0
-- flutter_bloc: ^8.1.1
-- flutter_svg: ^1.0.3
-- reactive_forms: ^12.0.0
-- connectivity_plus: ^2.3.6+1
-- geolocator: ^9.0.1
-- geocoder: ^0.2.1
-- intl: ^0.17.0
-- cached_network_image: ^3.2.2
-
-## :rocket: Getting Started
-
-NOTE: You must have Flutter installed to run this project. You can learn about the installation <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj2sp_h9e_5AhUSP-wKHQrvCx4QFnoECAkQAQ&url=https%3A%2F%2Fdocs.flutter.dev%2Fget-started%2Finstall&usg=AOvVaw0_DysGRxe6bHMb0c8Whvun">here</a>.
-
-#### 1. Clone the repository
+**1. Clone the Repository:** Open your terminal and clone the "Weather Loom" repository to your local machine:
 
 ```sh
-$ git clone https://github.com/devwraithe/open_weather
+$ git clone https://github.com/devwraithe/weather_loom
 ```
 
-#### 2. Move to the project directory
+**2. Navigate to the Project Folder:** Change your working directory to the project folder:
 
 ```
-$ cd open_weather
+$ cd weather_loom
 ```
 
-#### 3. Install the required dependencies
+**3. Install the Dependencies:** Install the project's dependencies using **pub** (Dart Package Manager):
 
 ```sh
 $ flutter pub get
 ```
 
-#### 4. Run the application (on a mobile device)
+### Usage
+
+To run and use the application, ensure you have either an emulator or a mobile device connected to your IDE. **[Here](https://developer.android.com/design-for-safety/privacy-sandbox/download#:~:text=Set%20up%20an%20Android%20device%20emulator%20image,-To%20set%20up&text=In%20Android%20Studio%2C%20go%20to,it%20isn't%20already%20installed.)** is a guide from the Android Developers' documentation to help you set up a device or an emulator.
+
+**1. Run the Application:** To start the "Quick Flashcards" application, run the following command:
 
 ```sh
 $ flutter run
 ```
-
-## :heart: Think it's great?
-
-If you love this project and you find it useful, please consider giving it a :star: and share it with everyone you know :heart_eyes:.
-
-## :question: Need Help?
-
-- For support, you can get in touch with me via <a href="https://www.linkedin.com/in/ibrahimaibrahim">LinkedIn</a>
