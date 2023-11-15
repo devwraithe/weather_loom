@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+
+import '../../config/theme/app_colors.dart';
 
 class Constants {
   // String Constants
@@ -20,5 +23,17 @@ class Constants {
   static EdgeInsets padding = const EdgeInsets.symmetric(
     horizontal: 18,
     vertical: 24,
+  );
+  static Container listIcon = Container(
+    alignment: Alignment.topRight,
+    margin: const EdgeInsets.only(
+      right: 18,
+      top: 16,
+    ),
+    child: const Icon(
+      TablerIcons.list,
+      color: AppColors.white,
+      size: 26,
+    ),
   );
 }

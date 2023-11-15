@@ -21,6 +21,7 @@ import '../bloc/forecast/bloc.dart';
 import '../bloc/forecast/event.dart';
 import '../widgets/city_overview.dart';
 import '../widgets/hourly_forecast.dart';
+import '../widgets/loading/overview_loading.dart';
 import '../widgets/location_item.dart';
 import '../widgets/new_daily_forecast.dart';
 
@@ -84,17 +85,14 @@ class _HomeState extends State<Home> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    CityOverview(
-                      loading: loading,
-                      condition: state is NewForecastLoaded
-                          ? state.result.description
-                          : "Not available",
-                      temp: state is NewForecastLoaded
-                          ? state.result.temp.toString()
-                          : "0",
-                      location: currentLocation ?? "Unknown",
-                      onPressed: () => _locationsList(),
-                    ),
+                    state is NewForecastLoaded
+                        ? CityOverview(
+                            condition: state.result.description,
+                            temp: state.result.temp.toString(),
+                            location: currentLocation!,
+                            onPressed: () => _locationsList(),
+                          )
+                        : const OverviewLoading(),
                     const SizedBox(height: 18),
                     NewHourlyForecast(
                       loading: loading,
