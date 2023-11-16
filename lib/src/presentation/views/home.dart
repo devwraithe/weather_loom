@@ -7,7 +7,6 @@ import 'package:open_weather/src/core/utilities/helpers/current_location_helper.
 import 'package:open_weather/src/presentation/bloc/forecast/state.dart';
 import 'package:open_weather/src/presentation/widgets/forecast_attributes.dart';
 import 'package:open_weather/src/presentation/widgets/shimmer/attributes_shimmer.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:timezone/data/latest.dart' as timezone;
 
 import '../../config/theme/app_text_theme.dart';
@@ -114,6 +113,14 @@ class _HomeState extends State<Home> {
                             attributes: state.result,
                           )
                         : const AttributesShimmer(),
+                    const SizedBox(height: 22),
+                    Text(
+                      "Weather for $currentLocation",
+                      style: AppTextTheme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.grey,
+                      ),
+                    ),
                     const SizedBox(height: 18),
                   ],
                 ),
@@ -241,44 +248,6 @@ class _HomeState extends State<Home> {
           ),
         );
       },
-    );
-  }
-
-  // Shimmer loading effect
-  _buildShimmerLoader() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 60, top: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 70),
-          Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: Container(
-              height: 14,
-              width: 140,
-              decoration: BoxDecoration(
-                color: AppColors.grey,
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: Container(
-              height: 10,
-              width: 70,
-              decoration: BoxDecoration(
-                color: AppColors.grey,
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
