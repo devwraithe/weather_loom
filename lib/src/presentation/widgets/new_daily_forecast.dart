@@ -69,9 +69,7 @@ class _NewDailyForecastState extends State<NewDailyForecast> {
                                       day.dailyTime.toInt() * 1000,
                                       isUtc: false),
                                 ),
-                          style: textTheme.bodyText1?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: textTheme.bodyLarge,
                         ),
                       ),
                       Flexible(
@@ -93,9 +91,7 @@ class _NewDailyForecastState extends State<NewDailyForecast> {
                         child: Text(
                           "${day.dailyMinTemp.round().toString()}\u{00B0}c to ${day.dailyMaxTemp.round().toString()}\u{00B0}c",
                           textAlign: TextAlign.end,
-                          style: textTheme.bodyText1?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: textTheme.bodyLarge,
                         ),
                       ),
                     ],

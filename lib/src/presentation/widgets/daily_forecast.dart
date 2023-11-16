@@ -73,13 +73,9 @@ class _HourForecastState extends State<HourForecast> {
                                   ),
                                   const SizedBox(height: 10),
                                   Image.asset(
-                                    // imageUrl: ApiUrls.weatherIcon(
-                                    //   hour.icon,
-                                    // ),
                                     widget.weather == "cloudy"
                                         ? 'assets/icons/cloud.png'
                                         : 'assets/icons/night-rain.png',
-
                                     filterQuality: FilterQuality.high,
                                     fit: BoxFit.cover,
                                     width: 36,
