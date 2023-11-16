@@ -7,6 +7,7 @@ import 'package:open_weather/src/core/utilities/helpers/current_location_helper.
 import 'package:open_weather/src/presentation/bloc/forecast/state.dart';
 import 'package:open_weather/src/presentation/widgets/forecast_attributes.dart';
 import 'package:open_weather/src/presentation/widgets/shimmer/attributes_shimmer.dart';
+import 'package:open_weather/src/presentation/widgets/shimmer/hourly_shimmer.dart';
 import 'package:timezone/data/latest.dart' as timezone;
 
 import '../../config/theme/app_text_theme.dart';
@@ -23,6 +24,7 @@ import '../widgets/hourly_forecast.dart';
 import '../widgets/loading/overview_loading.dart';
 import '../widgets/location_item.dart';
 import '../widgets/new_daily_forecast.dart';
+import '../widgets/shimmer/daily_shimmer.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -47,6 +49,7 @@ class _HomeState extends State<Home> {
       coordinates.latitude,
       coordinates.longitude,
     );
+    print(coordinates);
     context.read<NewForecastBloc>().add(
           OnCoordinatesChange(
             coordinates.latitude.toString(),
@@ -93,19 +96,15 @@ class _HomeState extends State<Home> {
                           )
                         : const OverviewLoading(),
                     const SizedBox(height: 18),
-                    NewHourlyForecast(
-                      loading: loading,
-                      forecast: state is NewForecastLoaded
-                          ? state.result.hourlyForecast
-                          : [],
-                    ),
+                    state is NewForecastLoaded
+                        ? NewHourlyForecast(
+                            timezone: state.result.timezone,
+                            forecast: state.result.hourlyForecast)
+                        : const HourlyShimmer(),
                     const SizedBox(height: 18),
-                    NewDailyForecast(
-                      loading: loading,
-                      daily: state is NewForecastLoaded
-                          ? state.result.dailyForecast
-                          : [],
-                    ),
+                    state is NewForecastLoaded
+                        ? NewDailyForecast(daily: state.result.dailyForecast)
+                        : const DailyShimmer(),
                     const SizedBox(height: 18),
                     state is NewForecastLoaded
                         ? ForecastAttributes(

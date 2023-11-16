@@ -16,8 +16,8 @@ class DailyForecastModel extends Equatable {
   factory DailyForecastModel.fromJson(Map<String, dynamic> json) =>
       DailyForecastModel(
         dailyTime: json["dt"],
-        dailyMinTemp: json['feels_like']['day'],
-        dailyMaxTemp: json['feels_like']['night'],
+        dailyMinTemp: json['temp']['min'],
+        dailyMaxTemp: json['temp']['max'],
         dailyIcon: json["weather"][0]["icon"],
       );
 
