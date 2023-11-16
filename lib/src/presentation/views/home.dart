@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:open_weather/src/config/theme/app_colors.dart';
@@ -63,12 +62,11 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Stack(
         children: [
-          CachedNetworkImage(
-            imageUrl: weatherImage(condition),
+          Image.asset(
+            weatherImage(condition),
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.cover,
-            fadeInDuration: const Duration(milliseconds: 0),
           ),
           Container(
             width: double.infinity,
